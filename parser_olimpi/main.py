@@ -4,6 +4,9 @@ from dataclasses import dataclass, asdict, field
 import datetime
 import json
 
+START_YEAR = 2024
+PAGE_LINK = "https://olimpiada.ru/article/1150"
+
 @dataclass
 class Contest:
     title: str = ''
@@ -16,10 +19,8 @@ class Contest:
     low_grade: int = -1
     up_grade: int = -1
     
-start_year = 2024
-
 def getNormDate(s: str) -> datetime.date:
-    s = s.replace(u'\xa0', u' ')
+    s = s.replace('\xa0', ' ')
 
     date = s.split('...')
 
@@ -38,13 +39,12 @@ def getNormDate(s: str) -> datetime.date:
     month = month_num_dict[month]
     day = int(date[0].split(' ')[0])
 
-    return datetime.date(start_year, month, day)
+    return datetime.date(START_YEAR, month, day)
     
 
 
-page_link = "https://olimpiada.ru/article/1150"
 try:
-    with requests.get(page_link) as page:
+    with requests.get(PAGE_LINK) as page:
         page.raise_for_status()
         soup = BeautifulSoup(page.text, 'html.parser')
 except requests.RequestException as e:
@@ -60,6 +60,7 @@ for table_number, table in enumerate(tables):
     rows = table.find_all('tr')[1:]
     for row in rows:
         row = row.find_all('p')
+        
         if len(row) == 4:
             title, number, subjects, lvl = row
             subjects = subjects.text.split(', ')
