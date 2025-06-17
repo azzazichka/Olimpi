@@ -10,7 +10,6 @@ PAGE_LINK = "https://olimpiada.ru/article/1150"
 @dataclass
 class Contest:
     title: str = ''
-    number: int = -1
     subjects: list = field(default_factory=list)
     lvl: int = -1
     date_start: str = ''
@@ -62,11 +61,10 @@ for table_number, table in enumerate(tables):
         row = row.find_all('p')
         
         if len(row) == 4:
-            title, number, subjects, lvl = row
+            title, _, subjects, lvl = row
             subjects = subjects.text.split(', ')
         else:
             title = row[0]
-            number = row[1]
             subjects = ['остальное']
             lvl = row[-1]
 
@@ -80,7 +78,7 @@ for table_number, table in enumerate(tables):
             print(f"Ошибка при запросе страницы олимпиады: {e}")
             continue
 
-        contest = Contest(title.text, number.text, subjects, lvl.text, link=contest_link)
+        contest = Contest(title.text, subjects, lvl.text, link=contest_link)
 
         grades = contest_soup.find('span', class_='classes_types_a')
         grades = grades.text.split(' ')[0]
