@@ -87,17 +87,19 @@ for table_number, table in enumerate(tables):
         contest.up_grade = grades[-1]
 
         date_table = contest_soup.find('table', class_='events_for_activity')
-        if date_table != None:
-            dates = date_table.find_all('a')[2::2]
-            
-            date_start = getNormDate(dates[0].text)
-            date_end = getNormDate(dates[-1].text)
         
-            if (date_end < date_start): 
-                date_end = datetime.date(date_end.year + 1, date_end.month, date_end.day)
-            
-            contest.date_start = date_start.isoformat()
-            contest.date_end = date_end.isoformat()
+        if date_table == None: continue
+        
+        dates = date_table.find_all('a')[2::2]
+        
+        date_start = getNormDate(dates[0].text)
+        date_end = getNormDate(dates[-1].text)
+    
+        if (date_end < date_start): 
+            date_end = datetime.date(date_end.year + 1, date_end.month, date_end.day)
+        
+        contest.date_start = date_start.isoformat()
+        contest.date_end = date_end.isoformat()
 
         contests.append(contest)
 
