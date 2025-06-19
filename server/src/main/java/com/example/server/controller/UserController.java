@@ -9,15 +9,15 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/users")
 public class UserController {
-    public final UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/all_users")
-    public List<User> getUsers() {
-        return userService.getAllUsers();
-    }
+//    @GetMapping(path = "/all_users")
+//    public List<User> getUsers() {
+//        return userService.getAllUsers();
+//    }
     @GetMapping
     public User getUser(@RequestParam String email, @RequestParam String password) {
         return userService.getUser(email, password);

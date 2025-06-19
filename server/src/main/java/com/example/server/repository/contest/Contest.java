@@ -12,13 +12,13 @@ import java.util.Date;
 public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String title;
-    Integer lvl;
-    Date date_start;
-    Date date_end;
-    String link;
-    Integer low_grade;
-    Integer up_grade;
+    private Long id;
+    private String title;
+    private Integer lvl;
+    private Date date_start;
+    private Date date_end;
+    private String link;
+    private Integer low_grade;
+    private Integer up_grade;
 
 }

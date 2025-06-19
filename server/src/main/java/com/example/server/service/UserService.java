@@ -2,6 +2,7 @@ package com.example.server.service;
 
 import com.example.server.repository.user.User;
 import com.example.server.repository.user.UserRepository;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void updateUser(Long id, String name, String email, String password, Integer accessLvl) {
+    public void updateUser(@NonNull Long id, String name, String email, String password, Integer accessLvl) {
         User user = getUser(id);
         if (name != null) user.setName(name);
         if (email != null && !user.getEmail().equals(email)) {

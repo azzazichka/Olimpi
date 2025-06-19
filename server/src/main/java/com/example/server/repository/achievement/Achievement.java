@@ -11,8 +11,8 @@ import java.util.List;
 public class Achievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    List<String> photos_links;
-    Long user_id;
-    Long contest_id;
+    private Long id;
+    private List<String> photos_links;
+    private Long user_id;
+    private Long contest_id;
 }
