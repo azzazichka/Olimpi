@@ -35,14 +35,8 @@ public class EventController {
         eventService.deleteEvent(id);
     }
 
-    @PutMapping(path = "{id}")
-    public void updateEvent(
-            @PathVariable Long id,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date start_time,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date end_time,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date notification_time) {
-
-        eventService.updateEvent(id, title, start_time, end_time, notification_time);
+    @PutMapping
+    public void updateEvent(@RequestBody Event changes) {
+        eventService.updateEvent(changes);
     }
 }

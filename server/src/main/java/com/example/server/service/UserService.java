@@ -54,18 +54,21 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void updateUser(@NonNull Long id, String name, String email, String password, Integer accessLvl) {
-        User user = getUser(id);
-        if (name != null) user.setName(name);
-        if (email != null && !user.getEmail().equals(email)) {
-            Optional<User> optionalUser = userRepository.findByEmail(email);
+    public void updateUser(User changes) {
+        if (changes.getId() == null) {
+            throw new IllegalArgumentException("Не указан id юзера при обновлении");
+        }
+        User user = getUser(changes.getId());
+        if (changes.getName() != null) user.setName(changes.getName());
+        if (changes.getEmail() != null && !user.getEmail().equals(changes.getEmail())) {
+            Optional<User> optionalUser = userRepository.findByEmail(changes.getEmail());
             if (optionalUser.isPresent()) {
                 throw new IllegalStateException("Юзер с email: " + user.getEmail() + " уже существует");
             }
-            user.setEmail(email);
+            user.setEmail(changes.getEmail());
         }
-        if (password != null) user.setPassword(password);
-        if (accessLvl != null) user.setAccess_lvl(accessLvl);
+        if (changes.getPassword() != null) user.setPassword(changes.getPassword());
+        if (changes.getAccess_lvl() != null) user.setAccess_lvl(changes.getAccess_lvl());
 
         userRepository.save(user);
     }

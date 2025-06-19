@@ -1,10 +1,12 @@
 package com.example.server.repository.contest;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "contests")
@@ -13,10 +15,17 @@ public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private List<String> subjects;
     private String title;
     private Integer lvl;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date_start;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date_end;
+
     private String link;
     private Integer low_grade;
     private Integer up_grade;

@@ -22,6 +22,14 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public Event getEvent(Long id) {
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if (optionalEvent.isEmpty()) {
+            throw new IllegalStateException("Ивента с id: " + id + " не существует");
+        }
+        return optionalEvent.get();
+    }
+
     public List<Event> getUserEvents(Long user_id) {
         return eventRepository.getEventsByUserId(user_id);
     }
@@ -31,25 +39,21 @@ public class EventService {
     }
 
     public void deleteEvent(Long id) {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
-        if (optionalEvent.isEmpty()) {
-            throw new IllegalStateException("Ивента с id: " + id + " не существует");
-        }
+        getEvent(id);
         eventRepository.deleteById(id);
     }
 
-    public void updateEvent(@NonNull Long id, String title, Date start_time, Date end_time, Date notification_time) {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
-        if (optionalEvent.isEmpty()) {
-            throw new IllegalStateException("Ивента с id: " + id + " не существует");
+    public void updateEvent(Event changes) {
+        if (changes.getId() == null) {
+            throw new IllegalArgumentException("Не указан id ивента при обновлении");
         }
-
-        Event event = optionalEvent.get();
-        if (title != null) event.setTitle(title);
-        if (start_time != null) event.setStart_time(start_time);
-        if (end_time != null) event.setEnd_time(end_time);
-        if (notification_time != null) event.setNotification_time(notification_time);
+        Event event = getEvent(changes.getId());
+        if (changes.getTitle() != null) event.setTitle(changes.getTitle());
+        if (changes.getStart_time() != null) event.setStart_time(changes.getStart_time());
+        if (changes.getEnd_time() != null) event.setEnd_time(changes.getEnd_time());
+        if (changes.getNotification_time() != null) event.setNotification_time(changes.getNotification_time());
 
         eventRepository.save(event);
     }
 }
+// TODO: в апдейты передавать листы
