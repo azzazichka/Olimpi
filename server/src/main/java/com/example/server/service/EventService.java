@@ -2,11 +2,8 @@ package com.example.server.service;
 
 import com.example.server.repository.event.Event;
 import com.example.server.repository.event.EventRepository;
-import com.example.server.repository.user.User;
-import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +28,7 @@ public class EventService {
     }
 
     public List<Event> getUserEvents(Long user_id) {
-        return eventRepository.getEventsByUserId(user_id);
+        return eventRepository.findAllByUserId(user_id);
     }
 
     public void createEvent(Event event) {
