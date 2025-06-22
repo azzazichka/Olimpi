@@ -13,7 +13,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Integer access_lvl;
+    private Integer access_lvl = 0;
 
 
 }

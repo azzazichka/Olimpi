@@ -2,7 +2,8 @@ package com.example.server.controller;
 
 import com.example.server.repository.achievement.Achievement;
 import com.example.server.service.AchievementService;
-import lombok.Data;
+import com.example.server.service.AchievementService.AchievementDTO;
+import com.example.server.service.AchievementService.ImagesDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ public class AchievementController {
     }
 
     @GetMapping
-    public List<Achievement> getAchievementsByUserId(@RequestParam Long user_id) throws IOException {
+    public List<AchievementDTO> getAchievementsByUserId(@RequestParam Long user_id) throws IOException {
         return achievementService.getAchievementsByUserId(user_id);
     }
 
@@ -33,19 +34,15 @@ public class AchievementController {
         achievementService.deleteAchievementsByIds(ids);
     }
 
-    @Data
-    public static class ImagesDTO {
-        private Long achievement_id;
-        private List<Long> image_ids;
-        private List<MultipartFile> images;
-    }
 
     @PutMapping(path = "/add_images")
-    public void addImages2Achievements(@RequestBody List<ImagesDTO> images) {
-
+    public void uploadImages2Achievements(
+            @RequestParam List<Long> achievement_ids,
+            @RequestParam List<MultipartFile> images
+    ) throws IOException {
+        achievementService.uploadImages2Achievements(images, achievement_ids);
 
     }
-
 
     @PutMapping(path = "/remove_images")
     public void removeImagesFromAchievements(@RequestBody List<ImagesDTO> ids) {
