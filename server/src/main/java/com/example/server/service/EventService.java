@@ -4,6 +4,7 @@ import com.example.server.repository.event.Event;
 import com.example.server.repository.event.EventRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,6 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
 
     public Event getEvent(Long id) {
         Optional<Event> optionalEvent = eventRepository.findById(id);
@@ -31,26 +29,28 @@ public class EventService {
         return eventRepository.findAllByUserId(user_id);
     }
 
-    public void createEvent(Event event) {
-        eventRepository.save(event);
+    public void createEvents(List<Event> events) {
+        eventRepository.saveAll(events);
     }
 
-    public void deleteEvent(Long id) {
-        getEvent(id);
-        eventRepository.deleteById(id);
+    public void deleteEvents(List<Long> ids) {
+        eventRepository.deleteAllById(ids);
     }
 
-    public void updateEvent(Event changes) {
-        if (changes.getId() == null) {
-            throw new IllegalArgumentException("Не указан id ивента при обновлении");
+    public void updateEvents(List<Event> changes) {
+        List<Event> events = new ArrayList<>();
+        for (Event change : changes) {
+            if (change.getId() == null) {
+                throw new IllegalArgumentException("Не указан id ивента при обновлении");
+            }
+            Event event = getEvent(change.getId());
+            if (change.getTitle() != null) event.setTitle(change.getTitle());
+            if (change.getStart_time() != null) event.setStart_time(change.getStart_time());
+            if (change.getEnd_time() != null) event.setEnd_time(change.getEnd_time());
+            if (change.getNotification_time() != null) event.setNotification_time(change.getNotification_time());
+
+            events.add(event);
         }
-        Event event = getEvent(changes.getId());
-        if (changes.getTitle() != null) event.setTitle(changes.getTitle());
-        if (changes.getStart_time() != null) event.setStart_time(changes.getStart_time());
-        if (changes.getEnd_time() != null) event.setEnd_time(changes.getEnd_time());
-        if (changes.getNotification_time() != null) event.setNotification_time(changes.getNotification_time());
-
-        eventRepository.save(event);
+        eventRepository.saveAll(events);
     }
 }
-// TODO: в апдейты передавать листы

@@ -4,6 +4,7 @@ import com.example.server.repository.contest.Contest;
 import com.example.server.repository.contest.ContestRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,27 +27,30 @@ public class ContestService {
 
 
 
-    public void deleteContest(Long id) {
-        getContest(id);
-        contestRepository.deleteById(id);
+    public void deleteContests(List<Long> ids) {
+        contestRepository.deleteAllById(ids);
     }
 
-    public void updateContest(Contest changes) {
-        if (changes.getId() == null) {
-            throw new IllegalArgumentException("Не указан id контеста при обновлении");
+    public void updateContests(List<Contest> changes) {
+        List<Contest> contests = new ArrayList<>();
+        for (Contest change : changes) {
+            if (change.getId() == null) {
+                throw new IllegalArgumentException("Не указан id контеста при обновлении");
+            }
+            Contest contest = getContest(change.getId());
+
+            if (change.getTitle() != null) contest.setTitle(change.getTitle());
+            if (change.getLvl() != null) contest.setLvl(change.getLvl());
+            if (change.getDate_start() != null) contest.setDate_start(change.getDate_start());
+            if (change.getDate_end() != null) contest.setDate_end(change.getDate_end());
+            if (change.getLink() != null) contest.setLink(change.getLink());
+            if (change.getLow_grade() != null) contest.setLow_grade(change.getLow_grade());
+            if (change.getUp_grade() != null) contest.setUp_grade(change.getUp_grade());
+            if (change.getSubjects() != null) contest.setSubjects(change.getSubjects());
+
+            contests.add(contest);
         }
-        Contest contest = getContest(changes.getId());
-
-        if (changes.getTitle() != null) contest.setTitle(changes.getTitle());
-        if (changes.getLvl() != null) contest.setLvl(changes.getLvl());
-        if (changes.getDate_start() != null) contest.setDate_start(changes.getDate_start());
-        if (changes.getDate_end() != null) contest.setDate_end(changes.getDate_end());
-        if (changes.getLink() != null) contest.setLink(changes.getLink());
-        if (changes.getLow_grade() != null) contest.setLow_grade(changes.getLow_grade());
-        if (changes.getUp_grade() != null) contest.setUp_grade(changes.getUp_grade());
-        if (changes.getSubjects() != null) contest.setSubjects(changes.getSubjects());
-
-        contestRepository.save(contest);
+        contestRepository.saveAll(contests);
     }
 
     public Contest getContest(Long id) {

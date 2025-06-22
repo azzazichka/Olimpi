@@ -1,13 +1,9 @@
 package com.example.server.controller;
 
 import com.example.server.repository.event.Event;
-import com.example.server.repository.user.User;
 import com.example.server.service.EventService;
-import com.example.server.service.UserService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,23 +16,23 @@ public class EventController {
     }
 
 
-    @GetMapping()
+    @GetMapping
     public List<Event> getUserEvents(@RequestParam Long user_id) {
         return eventService.getUserEvents(user_id);
     }
 
     @PostMapping
-    public void createEvent(@RequestBody Event event) {
-        eventService.createEvent(event);
+    public void createEvents(@RequestBody List<Event> events) {
+        eventService.createEvents(events);
     }
 
-    @DeleteMapping(path = "{id}")
-    public void deleteEvent(@PathVariable Long id) {
-        eventService.deleteEvent(id);
+    @DeleteMapping
+    public void deleteEvents(@RequestBody List<Long> ids) {
+        eventService.deleteEvents(ids);
     }
 
     @PutMapping
-    public void updateEvent(@RequestBody Event changes) {
-        eventService.updateEvent(changes);
+    public void updateEvents(@RequestBody List<Event> changes) {
+        eventService.updateEvents(changes);
     }
 }

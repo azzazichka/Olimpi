@@ -54,7 +54,7 @@ public class AchievementService {
         for (Achievement achievement : achievements) {
             File file = new File(getPath2images(achievement));
             if (!file.mkdir()) {
-                System.out.println("Директория "+ getPath2images(achievement) + " не создана");
+                System.out.println("Директория " + getPath2images(achievement) + " не создана");
             }
         }
     }
@@ -62,7 +62,6 @@ public class AchievementService {
     public void deleteAchievementsByIds(List<Long> ids) {
         for (Long id : ids) {
             Achievement achievement = getAchievement(id);
-            achievementRepository.deleteById(id);
 
             String path = getPath2images(achievement);
             File file = new File(path);
@@ -76,8 +75,8 @@ public class AchievementService {
             if (!deleted) {
                 System.out.println("файл: " + file.getName() + " не удалён");
             }
-
         }
+        achievementRepository.deleteAllById(ids);
     }
 
     public Achievement getAchievement(Long id) {

@@ -25,16 +25,15 @@ public class ContestController {
         contestService.createContests(contests);
     }
 
-    @DeleteMapping(path = "{id}")
-    public void deleteContest(@PathVariable Long id) {
-        contestService.deleteContest(id);
+    @DeleteMapping
+    public void deleteContests(@RequestBody List<Long> ids) {
+        contestService.deleteContests(ids);
     }
 
     @PutMapping
-    public void updateContest(@RequestBody Contest changes) {
-        contestService.updateContest(changes);
+    public void updateContests(@RequestBody List<Contest> changes) {
+        contestService.updateContests(changes);
     }
 
 
 }
-// TODO: удаление всех ивентов, где user_id == id;
