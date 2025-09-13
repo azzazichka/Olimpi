@@ -14,6 +14,4 @@ public class User {
     private String email;
     private String password;
     private Integer access_lvl = 0;
-
-
 }
