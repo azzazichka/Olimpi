@@ -22,17 +22,17 @@ public class EventController {
     }
 
     @PostMapping
-    public void createEvents(@RequestBody List<Event> events) {
-        eventService.createEvents(events);
+    public void createEvent(@RequestBody Event event) {
+        eventService.createEvent(event);
     }
 
     @DeleteMapping
-    public void deleteEvents(@RequestBody List<Long> ids) {
-        eventService.deleteEvents(ids);
+    public void deleteEvent(@RequestParam Long event_id) {
+        eventService.deleteEventById(event_id);
     }
 
     @PutMapping
-    public void updateEvents(@RequestBody List<Event> changes) {
-        eventService.updateEvents(changes);
+    public void updateEvent(@RequestBody Event changes) {
+        eventService.updateEvent(changes);
     }
 }

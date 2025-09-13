@@ -3,7 +3,6 @@ package com.example.server.controller;
 import com.example.server.repository.achievement.Achievement;
 import com.example.server.service.AchievementService;
 import com.example.server.service.AchievementService.AchievementDTO;
-import com.example.server.service.AchievementService.ImagesDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,33 +19,33 @@ public class AchievementController {
     }
 
     @GetMapping
-    public List<AchievementDTO> getAchievementsByUserId(@RequestParam Long user_id) throws IOException {
+    public List<AchievementDTO> getAchievement(@RequestParam Long user_id) throws IOException {
         return achievementService.getAchievementsByUserId(user_id);
     }
 
     @PostMapping
-    public void createAchievements(@RequestBody List<Achievement> achievements) {
-        achievementService.createAchievements(achievements);
+    public void createAchievement(@RequestBody Achievement achievement) {
+        achievementService.createAchievement(achievement);
     }
 
     @DeleteMapping
-    public void deleteAchievements(@RequestBody List<Long> ids) {
-        achievementService.deleteAchievementsByIds(ids);
+    public void deleteAchievement(@RequestParam Long achievement_id) {
+        achievementService.deleteAchievementById(achievement_id);
     }
 
 
-    @PutMapping(path = "/add_images")
-    public void uploadImages2Achievements(
-            @RequestParam List<Long> achievement_ids,
-            @RequestParam List<MultipartFile> images
+    @PutMapping(path = "/add_image")
+    public void uploadImage2Achievement(
+            @RequestParam Long achievement_id,
+            @RequestParam MultipartFile image
     ) throws IOException {
-        achievementService.uploadImages2Achievements(images, achievement_ids);
+        achievementService.uploadImage2Achievement(image, achievement_id);
 
     }
 
-    @PutMapping(path = "/remove_images")
-    public void removeImagesFromAchievements(@RequestBody List<ImagesDTO> ids) {
-        achievementService.removeImagesFromAchievements(ids);
+    @PutMapping(path = "/remove_image")
+    public void removeImageFromAchievement(@RequestParam Long image_id, @RequestParam Long achievement_id) {
+        achievementService.removeImageFromAchievement(image_id, achievement_id);
     }
 
 }

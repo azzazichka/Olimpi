@@ -20,20 +20,18 @@ public class ContestController {
         return contestService.getAllContests();
     }
 
-    @PostMapping()
-    public void createContests(@RequestBody List<Contest> contests) {
-        contestService.createContests(contests);
+    @PostMapping
+    public void createContest(@RequestBody Contest contest) {
+        contestService.createContest(contest);
     }
 
     @DeleteMapping
-    public void deleteContests(@RequestBody List<Long> ids) {
-        contestService.deleteContests(ids);
+    public void deleteContest(@RequestParam Long contest_id) {
+        contestService.deleteContest(contest_id);
     }
 
     @PutMapping
-    public void updateContests(@RequestBody List<Contest> changes) {
-        contestService.updateContests(changes);
+    public void updateContest(@RequestBody Contest changes) {
+        contestService.updateContest(changes);
     }
-
-
 }
