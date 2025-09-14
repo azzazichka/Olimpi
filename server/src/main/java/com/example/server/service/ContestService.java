@@ -28,6 +28,7 @@ public class ContestService {
 
 
     public void deleteContest(Long id) {
+        getContest(id);
         contestRepository.deleteById(id);
     }
 
