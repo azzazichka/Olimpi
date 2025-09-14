@@ -31,3 +31,5 @@ public class Contest {
     private Integer up_grade;
 
 }
+
+
