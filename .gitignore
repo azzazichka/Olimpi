@@ -428,3 +428,4 @@ obj/
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,python,java,intellij
 /server/src/main/java/upload_images
+server/src/main/resources/database.properties
