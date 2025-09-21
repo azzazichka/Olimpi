@@ -1,4 +1,4 @@
-package com.example.server.repository.event;
+package com.example.server.repository.user_event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -7,9 +7,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Entity
-@Table(name = "events")
+@Table(name = "user_events")
 @Data
-public class Event {
+public class UserEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,4 +26,5 @@ public class Event {
     private Date notification_time;
     
     private Long user_id;
+    private Long contest_id;
 }

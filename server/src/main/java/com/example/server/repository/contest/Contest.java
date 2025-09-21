@@ -16,7 +16,6 @@ public class Contest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private List<String> subjects;
     private String title;
     private Integer lvl;
 
@@ -29,7 +28,10 @@ public class Contest {
     private String link;
     private Integer low_grade;
     private Integer up_grade;
+    private boolean archived;
 
+    @Transient
+    List<String> subjects;
 }
 
 

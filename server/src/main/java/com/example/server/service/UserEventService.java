@@ -1,35 +1,34 @@
 package com.example.server.service;
 
-import com.example.server.repository.event.Event;
-import com.example.server.repository.event.EventRepository;
+import com.example.server.repository.user_event.UserEvent;
+import com.example.server.repository.user_event.UserEventRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EventService {
-    private final EventRepository eventRepository;
+public class UserEventService {
+    private final UserEventRepository eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    public UserEventService(UserEventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
 
-    public Event getEvent(Long id) {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
+    public UserEvent getEvent(Long id) {
+        Optional<UserEvent> optionalEvent = eventRepository.findById(id);
         if (optionalEvent.isEmpty()) {
-            throw new IllegalStateException("Ивента с id: " + id + " не существует");
+            throw new IllegalStateException("Ивента с id " + id + " не существует");
         }
         return optionalEvent.get();
     }
 
-    public List<Event> getUserEvents(Long user_id) {
+    public List<UserEvent> getUserEvents(Long user_id) {
         return eventRepository.findAllByUserId(user_id);
     }
 
-    public void createEvent(Event event) {
+    public void createEvent(UserEvent event) {
         eventRepository.save(event);
     }
 
@@ -38,11 +37,11 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
-    public void updateEvent(Event changes) {
+    public void updateEvent(UserEvent changes) {
         if (changes.getId() == null) {
             throw new IllegalArgumentException("Не указан id ивента при обновлении");
         }
-        Event event = getEvent(changes.getId());
+        UserEvent event = getEvent(changes.getId());
         if (changes.getTitle() != null) event.setTitle(changes.getTitle());
         if (changes.getStart_time() != null) event.setStart_time(changes.getStart_time());
         if (changes.getEnd_time() != null) event.setEnd_time(changes.getEnd_time());

@@ -45,7 +45,6 @@ public class ContestService {
         if (changes.getLink() != null) contest.setLink(changes.getLink());
         if (changes.getLow_grade() != null) contest.setLow_grade(changes.getLow_grade());
         if (changes.getUp_grade() != null) contest.setUp_grade(changes.getUp_grade());
-        if (changes.getSubjects() != null) contest.setSubjects(changes.getSubjects());
 
         contestRepository.save(contest);
     }

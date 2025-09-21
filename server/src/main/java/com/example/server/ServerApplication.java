@@ -12,6 +12,3 @@ public class ServerApplication {
 		SpringApplication.run(ServerApplication.class, args);
 	}
 }
-
-
-// TODO: поустранять warn'ы

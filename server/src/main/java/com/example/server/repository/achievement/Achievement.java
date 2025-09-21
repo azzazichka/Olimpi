@@ -16,9 +16,4 @@ public class Achievement {
     private Long id;
     private Long user_id;
     private Long contest_id;
-    private Integer image_ids_sequence = 0;
-
-    public void incrementSequence() {
-        image_ids_sequence++;
-    }
 }
