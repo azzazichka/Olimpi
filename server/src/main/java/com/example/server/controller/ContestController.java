@@ -26,8 +26,8 @@ public class ContestController {
     }
 
     @DeleteMapping
-    public void deleteContest(@RequestParam Long contest_id) {
-        contestService.deleteContest(contest_id);
+    public void deleteContest(@RequestParam Long id) {
+        contestService.deleteContest(id);
     }
 
     @PutMapping

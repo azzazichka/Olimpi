@@ -2,6 +2,7 @@ package com.example.server.service;
 
 import com.example.server.repository.contest.Contest;
 import com.example.server.repository.contest.ContestRepository;
+import com.example.server.repository.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ import java.util.Optional;
 @Service
 public class ContestService {
     private final ContestRepository contestRepository;
+    private final SubjectService subjectService;
 
-    public ContestService(ContestRepository contestRepository) {
+    public ContestService(ContestRepository contestRepository, SubjectService subjectService) {
         this.contestRepository = contestRepository;
+        this.subjectService = subjectService;
     }
 
 
@@ -23,12 +26,16 @@ public class ContestService {
 
     public void createContest(Contest contest) {
         contestRepository.save(contest);
+        for (String subject : contest.getSubjects()) {
+            subjectService.createSubject(new Subject(null, subject, contest.getId()));
+        }
     }
 
 
 
     public void deleteContest(Long id) {
         getContest(id);
+        subjectService.deleteSubjects(id);
         contestRepository.deleteById(id);
     }
 

@@ -27,8 +27,8 @@ public class UserEventController {
     }
 
     @DeleteMapping
-    public void deleteEvent(@RequestParam Long event_id) {
-        userEventService.deleteEventById(event_id);
+    public void deleteEvent(@RequestParam Long id) {
+        userEventService.deleteEventById(id);
     }
 
     @PutMapping

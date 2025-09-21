@@ -19,8 +19,8 @@ public class AttachmentController {
     }
 
     @GetMapping
-    public List<Attachment> getAttachments(@RequestParam(name = "achievement_id") Long achievementId) throws IOException {
-        return attachmentService.getAttachments(achievementId);
+    public List<Attachment> getAttachments(@RequestParam Long id) throws IOException {
+        return attachmentService.getAttachments(id);
     }
 
     @PostMapping

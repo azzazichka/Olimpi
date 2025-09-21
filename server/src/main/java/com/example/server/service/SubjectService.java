@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.repository.subject.Subject;
 import com.example.server.repository.subject.SubjectRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,12 @@ public class SubjectService {
         this.subjectRepository = subjectRepository;
     }
 
-    
+
+    public void createSubject(Subject subject) {
+        subjectRepository.save(subject);
+    }
+
+    public void deleteSubjects(Long contest_id) {
+        subjectRepository.deleteAllByContestId(contest_id);
+    }
 }
