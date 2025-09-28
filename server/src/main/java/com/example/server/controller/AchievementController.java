@@ -2,8 +2,9 @@ package com.example.server.controller;
 
 import com.example.server.repository.achievement.Achievement;
 import com.example.server.service.AchievementService;
+import com.example.server.service.UserKeyService;
+import jakarta.security.auth.message.AuthException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,23 +13,35 @@ import java.util.List;
 @RequestMapping(path = "api/achievements")
 public class AchievementController {
     private final AchievementService achievementService;
+    private final UserKeyService userKeyService;
 
-    public AchievementController(AchievementService achievementService) {
+    public AchievementController(AchievementService achievementService, UserKeyService userKeyService) {
         this.achievementService = achievementService;
+        this.userKeyService = userKeyService;
     }
 
     @GetMapping
-    public List<Achievement> getAchievement(@RequestParam Long user_id) throws IOException {
-        return achievementService.getAchievementsByUserId(user_id);
+    public List<Achievement> getAchievements(@RequestHeader("x-api-key") String key) throws IOException {
+        Long user_id = userKeyService.getUserIdByKey(key);
+        return achievementService.getAchievements(user_id);
     }
 
     @PostMapping
-    public void createAchievement(@RequestBody Achievement achievement) throws IOException {
+    public void createAchievement(
+            @RequestBody Achievement achievement,
+            @RequestHeader("x-api-key") String key
+    ) throws IOException, AuthException {
+        userKeyService.checkAuthAchievement(achievement, key);
+
         achievementService.createAchievement(achievement);
     }
 
     @DeleteMapping
-    public void deleteAchievement(@RequestParam Long id) throws IOException {
+    public void deleteAchievement(
+            @RequestParam Long id, @RequestHeader("x-api-key") String key
+    ) throws IOException, AuthException {
+        userKeyService.checkAuthAchievement(achievementService.getAchievement(id), key);
+
         achievementService.deleteAchievementById(id);
     }
 }

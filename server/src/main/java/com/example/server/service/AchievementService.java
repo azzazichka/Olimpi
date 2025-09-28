@@ -2,17 +2,11 @@ package com.example.server.service;
 
 import com.example.server.repository.achievement.Achievement;
 import com.example.server.repository.achievement.AchievementRepository;
-import com.example.server.repository.attachment.Attachment;
-import lombok.Data;
+import jakarta.security.auth.message.AuthException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystemException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,12 +18,15 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final AttachmentService attachmentService;
 
-    public AchievementService(AchievementRepository achievementRepository, AttachmentService attachmentService) {
+    public AchievementService(
+            AchievementRepository achievementRepository, 
+            AttachmentService attachmentService
+    ) {
         this.achievementRepository = achievementRepository;
         this.attachmentService = attachmentService;
     }
 
-    public List<Achievement> getAchievementsByUserId(Long user_id) throws IOException {
+    public List<Achievement> getAchievements(Long user_id) {
         return achievementRepository.findAllByUserId(user_id);
     }
 
@@ -43,8 +40,6 @@ public class AchievementService {
     }
 
     public void deleteAchievementById(Long id) throws IOException {
-        Achievement achievement = getAchievement(id);
-
         File file = new File(getPath2Attachments(id));
         for (File img : Objects.requireNonNull(file.listFiles())) {
             attachmentService.deleteAttachment(Long.valueOf(img.getName()));

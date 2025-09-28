@@ -1,15 +1,15 @@
 package com.example.server.service;
 
+import com.example.server.repository.achievement.Achievement;
 import com.example.server.repository.attachment.Attachment;
 import com.example.server.repository.attachment.AttachmentRepository;
+import jakarta.security.auth.message.AuthException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +25,6 @@ public class AttachmentService {
     public List<Attachment> getAttachments(Long achievementId) throws IOException {
         List<Attachment> attachments = attachmentRepository.findAllByAchievementId(achievementId);
 
-        String path2images = getPath2Attachments(achievementId);
         for (Attachment attachment : attachments) {
             attachment.setImageBytes(Files.readAllBytes(Path.of(attachment.getPath())));
         }

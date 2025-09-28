@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +24,9 @@ public class UserKeyController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> logInUser(
-            @RequestHeader("email") String email,
-            @RequestHeader("password") String password
-    ) {
+            @RequestHeader String email,
+            @RequestHeader String password
+    ) throws NoSuchAlgorithmException {
         Map<String, String> data = new HashMap<>();
 
         User user;
