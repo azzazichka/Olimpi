@@ -22,26 +22,14 @@ public class UserKeyController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<Map<String, String>> logInUser(
+    @GetMapping
+    public String logInUser(
             @RequestHeader String email,
             @RequestHeader String password
     ) throws NoSuchAlgorithmException {
-        Map<String, String> data = new HashMap<>();
+        User user = userService.getUser(email, password);
 
-        User user;
-        try {
-            user = userService.getUser(email, password);
-        } catch (IllegalStateException e) {
-            data.put("message", e.getMessage());
-            return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
-        }
-        String key = userKeyService.generateUserKey(user);
-
-        data.put("message", "Log in success");
-        data.put("x-api-key", key);
-
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return userKeyService.generateUserKey(user);
     }
 
     @DeleteMapping
