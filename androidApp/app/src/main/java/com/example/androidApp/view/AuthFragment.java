@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
+import com.example.androidApp.MainActivity;
 import com.example.androidApp.presenter.UserAuth;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidapp.R;
@@ -62,7 +63,7 @@ public class AuthFragment extends Fragment {
     }
 
     private void submit(@NonNull View view) {
-        loading_progress_bar.show();
+        MainActivity.showLoad(loading_progress_bar, requireActivity());
 
         parentActivity.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -100,8 +101,7 @@ public class AuthFragment extends Fragment {
 
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                loading_progress_bar.hide();
-                parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                MainActivity.hideLoad(loading_progress_bar, requireActivity());
             });
         };
         return new Thread(registerTask);
@@ -117,18 +117,15 @@ public class AuthFragment extends Fragment {
 
                     SharedPreferences sharedPref = getActivity().getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.remove("api-key");
 
                     String key = response.body();
 
                     editor.putString("api_key", key);
                     editor.apply();
 
-                    ServiceGenerator.updateKey(key);
+                    assert key != null;
+                    UserAuth.getInstance().userAuth(key);
 
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, ProfileFragment.class, null)
-                            .commit();
                 } else {
                     new Handler(Looper.getMainLooper()).post(() -> {
                         Toast.makeText(view.getContext(), "Неправильная почта/пароль", Toast.LENGTH_LONG).show();
@@ -139,8 +136,7 @@ public class AuthFragment extends Fragment {
             }
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                loading_progress_bar.hide();
-                parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                MainActivity.hideLoad(loading_progress_bar, requireActivity());
             });
         };
 

@@ -1,18 +1,14 @@
-package com.example.androidApp.view;
+package com.example.androidApp.view.profile;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.androidApp.MainActivity;
 import com.example.androidApp.presenter.UserAuth;
@@ -31,11 +27,11 @@ public class ProfileFragment extends Fragment {
 
         log_out_button = view.findViewById(R.id.log_out);
 
-        assert getActivity() != null;
-        SharedPreferences sharedPref = getActivity().getPreferences(MODE_PRIVATE);
+        TextView user_info = view.findViewById(R.id.user_info);
+        user_info.setText(UserAuth.getInstance().getUser().toString());
 
         log_out_button.setOnClickListener(v -> {
-            ((MainActivity)getActivity()).logOutUser();
+            ((MainActivity)requireActivity()).logOutUser();
         });
     }
 }

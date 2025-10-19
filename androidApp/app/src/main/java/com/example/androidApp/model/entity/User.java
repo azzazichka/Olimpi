@@ -1,6 +1,10 @@
 package com.example.androidApp.model.entity;
 
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+
 public class User {
     private Long id;
     private String name;
@@ -8,12 +12,23 @@ public class User {
     private String password;
     private Integer access_lvl = 0;
 
+    @Expose(serialize = false)
+    private String api_key;
+
     public User(Long id, String name, String email, String password, Integer access_lvl) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.access_lvl = access_lvl;
+    }
+
+    public void setApi_key(String api_key) {
+        this.api_key = api_key;
+    }
+
+    public String getApi_key() {
+        return api_key;
     }
 
     public Long getId() {
@@ -54,6 +69,19 @@ public class User {
 
     public void setAccess_lvl(Integer access_lvl) {
         this.access_lvl = access_lvl;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ",\nname='" + name +
+                ",\nemail='" + email +
+                ",\npassword='" + password +
+                ",\naccess_lvl=" + access_lvl +
+                ",\napi_key='" + api_key +
+                '}';
     }
 }
 

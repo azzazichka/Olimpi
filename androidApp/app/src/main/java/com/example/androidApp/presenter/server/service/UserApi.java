@@ -13,5 +13,5 @@ public interface UserApi {
     Call<ResponseBody> registerUser(@Body User user);
 
     @GET("/api/users")
-    Call<User> getUser(String key);
+    Call<User> getUser();
 }

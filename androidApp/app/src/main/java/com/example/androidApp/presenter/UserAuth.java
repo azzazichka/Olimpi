@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class UserAuth {
     private static UserAuth instance;
     private User user;
-    private MutableLiveData<Boolean> authData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> authData = new MutableLiveData<>();
 
     public LiveData<Boolean> getAuthData() {
         return authData;
@@ -45,20 +45,29 @@ public class UserAuth {
         return instance;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void userAuth(String key) {
         if (key.isEmpty()) {
             authData.setValue(false);
             return;
         }
 
+        ServiceGenerator.updateKey(key);
+
         UserApi userApi = ServiceGenerator.createService(UserApi.class);
-        Call<User> userCall = userApi.getUser(key);
+        Call<User> userCall = userApi.getUser();
 
         userCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
                     user = response.body();
+                    assert user != null;
+                    user.setApi_key(key);
+
                     authData.postValue(true);
                 } else {
                     user = null;
@@ -100,7 +109,7 @@ public class UserAuth {
                 if (response.isSuccessful()) {
                     Log.i("AZZA", "log out success");
                 } else {
-                    Log.e("AZZA", "error on server while logging out");
+                    Log.e("AZZA", "error on server :" + response.toString());
                 }
             }
 
