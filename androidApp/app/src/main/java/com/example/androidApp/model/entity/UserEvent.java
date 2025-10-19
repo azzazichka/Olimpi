@@ -1,28 +1,17 @@
 package com.example.androidApp.model.entity;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.example.androidApp.model.entity.type_converters.ContestDateConverter;
-import com.example.androidApp.model.entity.type_converters.EventDateConverter;
 
 import java.util.Date;
 
-@Entity(tableName = "user_events")
 public class UserEvent {
-    @PrimaryKey(autoGenerate = true)
     private Long id;
 
     private String title;
 
-    @TypeConverters({EventDateConverter.class})
     private Date start_time;
 
-    @TypeConverters({EventDateConverter.class})
     private Date end_time;
 
-    @TypeConverters({EventDateConverter.class})
     private Date notification_time;
 
     private Long contest_id;

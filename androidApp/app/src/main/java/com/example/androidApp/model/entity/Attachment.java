@@ -1,24 +1,12 @@
 package com.example.androidApp.model.entity;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "attachments")
 public class Attachment {
-    @PrimaryKey(autoGenerate = true)
     private Long id;
     private Long achievement_id;
     private String title;
 
-    @Ignore
     private byte[] imageBytes;
 
-    public String getPath() {
-        return System.getProperty("user.dir") +
-                "/src/main/attachments/achievement_"
-                + achievement_id + "/" + id;
-    }
 
     public Long getId() {
         return id;

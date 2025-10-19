@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.androidApp.MainActivity;
 import com.example.androidApp.presenter.UserAuth;
 import com.example.androidapp.R;
 
@@ -34,19 +35,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getPreferences(MODE_PRIVATE);
 
         log_out_button.setOnClickListener(v -> {
-            logOutUser(sharedPref);
+            ((MainActivity)getActivity()).logOutUser();
         });
-    }
-
-    private void logOutUser(SharedPreferences sharedPref) {
-        UserAuth.logOut();
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("api_key", "");
-        editor.apply();
-
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, AuthFragment.class, null)
-                .commit();
     }
 }

@@ -1,29 +1,18 @@
 package com.example.androidApp.model.entity;
 
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.example.androidApp.model.entity.type_converters.ContestDateConverter;
-
 import java.util.Date;
 import java.util.List;
 
 
-@Entity(tableName = "contests")
 public class Contest {
-    @PrimaryKey(autoGenerate = true)
     private Long id;
 
     private String title;
     private Integer lvl;
 
-    @TypeConverters({ContestDateConverter.class})
     private Date date_start;
 
-    @TypeConverters({ContestDateConverter.class})
     private Date date_end;
 
     private String link;
@@ -31,7 +20,6 @@ public class Contest {
     private Integer up_grade;
     private boolean archived;
 
-    @Ignore
     List<String> subjects;
 
     public Contest(Long id, String title, Integer lvl, Date date_start, Date date_end, String link, Integer low_grade, Integer up_grade, boolean archived) {

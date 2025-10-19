@@ -1,13 +1,8 @@
 package com.example.androidApp.model.entity;
 
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-
-@Entity(tableName = "achievements")
 public class Achievement {
-    @PrimaryKey(autoGenerate = true)
     private Long id;
     private Long contest_id;
 

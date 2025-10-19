@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.example.androidApp.presenter.UserAuth;
@@ -36,7 +37,7 @@ public class AuthFragment extends Fragment {
     private Button submit_button;
     private EditText email_edit_text, password_edit_text;
     private SwitchCompat mode_switch;
-    private ProgressBar loading_progress_bar;
+    private ContentLoadingProgressBar loading_progress_bar;
     private Activity parentActivity;
 
     public AuthFragment() {
@@ -61,9 +62,10 @@ public class AuthFragment extends Fragment {
     }
 
     private void submit(@NonNull View view) {
-        loading_progress_bar.setVisibility(VISIBLE);
+        loading_progress_bar.show();
 
-        parentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+        parentActivity.getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         final boolean LOGIN_MODE = !mode_switch.isChecked();
@@ -80,7 +82,7 @@ public class AuthFragment extends Fragment {
     private Thread getRegisterThread(@NonNull View view) {
         Runnable registerTask = () -> {
             try {
-                Response<ResponseBody> response = UserAuth.register(email_edit_text.getText().toString(), password_edit_text.getText().toString());
+                Response<ResponseBody> response = UserAuth.getInstance().register(email_edit_text.getText().toString(), password_edit_text.getText().toString());
                 if (response.isSuccessful()) {
                     new Handler(Looper.getMainLooper()).post(() -> {
                         mode_switch.setChecked(false);
@@ -98,7 +100,7 @@ public class AuthFragment extends Fragment {
 
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                loading_progress_bar.setVisibility(GONE);
+                loading_progress_bar.hide();
                 parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             });
         };
@@ -109,7 +111,7 @@ public class AuthFragment extends Fragment {
     private Thread getLogInThread(@NonNull View view) {
         Runnable logInTask = () -> {
             try {
-                Response<String> response = UserAuth.logIn(email_edit_text.getText().toString(), password_edit_text.getText().toString());
+                Response<String> response = UserAuth.getInstance().logIn(email_edit_text.getText().toString(), password_edit_text.getText().toString());
                 if (response.isSuccessful()) {
                     assert getActivity() != null;
 
@@ -137,7 +139,7 @@ public class AuthFragment extends Fragment {
             }
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                loading_progress_bar.setVisibility(GONE);
+                loading_progress_bar.hide();
                 parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             });
         };

@@ -31,6 +31,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -43,9 +44,9 @@ dependencies {
 
     implementation(libs.fragment)
 
-    //room
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
+    // live data
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.9.4")
 
     // retrofit
     implementation(libs.retrofit)

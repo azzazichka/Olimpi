@@ -1,4 +1,4 @@
-package com.example.androidApp.model.entity.type_converters;
+package com.example.androidApp.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
