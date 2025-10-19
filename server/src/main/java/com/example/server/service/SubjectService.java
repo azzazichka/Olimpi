@@ -4,6 +4,8 @@ import com.example.server.repository.subject.Subject;
 import com.example.server.repository.subject.SubjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubjectService {
     private final SubjectRepository subjectRepository;
@@ -19,5 +21,9 @@ public class SubjectService {
 
     public void deleteSubjects(Long contest_id) {
         subjectRepository.deleteAllByContestId(contest_id);
+    }
+
+    public List<Subject> getSubjects(List<String> subjects_names) {
+        return subjectRepository.findBySubjectsNames(subjects_names);
     }
 }

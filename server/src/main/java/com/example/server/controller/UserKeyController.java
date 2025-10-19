@@ -3,13 +3,9 @@ package com.example.server.controller;
 import com.example.server.repository.user.User;
 import com.example.server.service.UserKeyService;
 import com.example.server.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/users_keys")

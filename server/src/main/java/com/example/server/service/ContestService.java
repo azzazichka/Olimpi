@@ -32,7 +32,6 @@ public class ContestService {
     }
 
 
-
     public void deleteContest(Long id) {
         getContest(id);
         subjectService.deleteSubjects(id);
@@ -62,5 +61,17 @@ public class ContestService {
             throw new IllegalStateException("Контеста с id: " + id + " не существует");
         }
         return optionalContest.get();
+    }
+
+    public List<Contest> getContestBySubjects(List<String> subjects_names) {
+        List<Subject> subjects = subjectService.getSubjects(subjects_names);
+        List<Contest> contests = new ArrayList<>();
+
+        for (Subject subject : subjects) {
+            Contest contest = getContest(subject.getContest_id());
+            contests.add(contest);
+        }
+
+        return contests;
     }
 }

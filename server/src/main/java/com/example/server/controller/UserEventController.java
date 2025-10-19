@@ -1,7 +1,6 @@
 package com.example.server.controller;
 
 import com.example.server.repository.user_event.UserEvent;
-import com.example.server.repository.user_key.UserKey;
 import com.example.server.service.UserEventService;
 import com.example.server.service.UserKeyService;
 import jakarta.security.auth.message.AuthException;

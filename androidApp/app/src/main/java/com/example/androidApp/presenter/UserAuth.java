@@ -6,22 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.androidApp.model.entity.Achievement;
-import com.example.androidApp.model.entity.Attachment;
-import com.example.androidApp.model.entity.Contest;
-import com.example.androidApp.model.entity.Subject;
 import com.example.androidApp.model.entity.User;
 import com.example.androidApp.presenter.server.ServiceGenerator;
-import com.example.androidApp.presenter.server.service.AchievementApi;
-import com.example.androidApp.presenter.server.service.AttachmentApi;
-import com.example.androidApp.presenter.server.service.ContestApi;
-import com.example.androidApp.presenter.server.service.SubjectApi;
 import com.example.androidApp.presenter.server.service.UserApi;
-import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidApp.presenter.server.service.UserKeyApi;
 
 import java.io.IOException;
-import java.util.List;
 
 
 import okhttp3.ResponseBody;

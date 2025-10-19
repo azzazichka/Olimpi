@@ -3,11 +3,9 @@ package com.example.server.controller;
 import com.example.server.repository.user.User;
 import com.example.server.service.UserKeyService;
 import com.example.server.service.UserService;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/users")

@@ -14,8 +14,6 @@ public class ContestSearchFragment extends Fragment {
         super(R.layout.fragment_contest_search);
     }
 
-    
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

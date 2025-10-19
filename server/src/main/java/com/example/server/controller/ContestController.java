@@ -19,12 +19,12 @@ public class ContestController {
     }
 
     @GetMapping
-    public List<Contest> getAllContests() {
-        return contestService.getAllContests();
+    public List<Contest> getContestsBySubjects(@RequestBody List<String> subjects_names) {
+        return contestService.getContestBySubjects(subjects_names);
     }
 
     @PostMapping
-    public void createContest(@RequestBody Contest contest, @RequestHeader("x-api-key") String key) throws AuthException { // TODO: x-api-key;
+    public void createContest(@RequestBody Contest contest, @RequestHeader("x-api-key") String key) throws AuthException {
         userKeyService.checkAccessRights(key, 1);
         contestService.createContest(contest);
     }
