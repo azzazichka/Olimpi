@@ -9,12 +9,10 @@ import androidx.room.PrimaryKey;
 public class Achievement {
     @PrimaryKey(autoGenerate = true)
     private Long id;
-    private Long user_id;
     private Long contest_id;
 
-    public Achievement(Long id, Long user_id, Long contest_id) {
+    public Achievement(Long id, Long contest_id) {
         this.id = id;
-        this.user_id = user_id;
         this.contest_id = contest_id;
     }
 
@@ -26,13 +24,6 @@ public class Achievement {
         this.id = id;
     }
 
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
 
     public Long getContest_id() {
         return contest_id;

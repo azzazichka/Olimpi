@@ -24,17 +24,15 @@ public class UserEvent {
 
     @TypeConverters({EventDateConverter.class})
     private Date notification_time;
-    
-    private Long user_id;
+
     private Long contest_id;
 
-    public UserEvent(Long id, String title, Date start_time, Date end_time, Date notification_time, Long user_id, Long contest_id) {
+    public UserEvent(Long id, String title, Date start_time, Date end_time, Date notification_time, Long contest_id) {
         this.id = id;
         this.title = title;
         this.start_time = start_time;
         this.end_time = end_time;
         this.notification_time = notification_time;
-        this.user_id = user_id;
         this.contest_id = contest_id;
     }
 
@@ -76,14 +74,6 @@ public class UserEvent {
 
     public void setNotification_time(Date notification_time) {
         this.notification_time = notification_time;
-    }
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
     }
 
     public Long getContest_id() {

@@ -8,14 +8,14 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.androidApp.model.entity.User;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.view.AuthFragment;
 import com.example.androidApp.view.ProfileFragment;
 import com.example.androidapp.R;
 
 public class MainActivity extends AppCompatActivity {
-    Button log_out_button;
-
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

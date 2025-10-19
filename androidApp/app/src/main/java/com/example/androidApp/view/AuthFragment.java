@@ -4,12 +4,14 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,6 +37,7 @@ public class AuthFragment extends Fragment {
     private EditText email_edit_text, password_edit_text;
     private SwitchCompat mode_switch;
     private ProgressBar loading_progress_bar;
+    private Activity parentActivity;
 
     public AuthFragment() {
         super(R.layout.fragment_auth);
@@ -44,11 +47,13 @@ public class AuthFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        parentActivity = requireActivity();
+
         submit_button = view.findViewById(R.id.submit);
         email_edit_text = view.findViewById(R.id.email);
         password_edit_text = view.findViewById(R.id.password);
         mode_switch = view.findViewById(R.id.mode);
-        loading_progress_bar = view.findViewById(R.id.loading);
+        loading_progress_bar = parentActivity.findViewById(R.id.loading);
 
         submit_button.setOnClickListener(v -> {
             submit(view);
@@ -58,8 +63,8 @@ public class AuthFragment extends Fragment {
     private void submit(@NonNull View view) {
         loading_progress_bar.setVisibility(VISIBLE);
 
-        submit_button.setClickable(false);
-        mode_switch.setClickable(false);
+        parentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         final boolean LOGIN_MODE = !mode_switch.isChecked();
         if (LOGIN_MODE) {
@@ -82,7 +87,6 @@ public class AuthFragment extends Fragment {
                         Toast.makeText(view.getContext(), "Аккаунт создан успешно", Toast.LENGTH_LONG).show();
                     });
                 } else {
-                    Log.e("AZZA", response.toString());
                     new Handler(Looper.getMainLooper()).post(() -> {
                         Toast.makeText(view.getContext(), "Данный email занят", Toast.LENGTH_LONG).show();
                     });
@@ -94,9 +98,8 @@ public class AuthFragment extends Fragment {
 
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                submit_button.setClickable(true);
-                mode_switch.setClickable(true);
                 loading_progress_bar.setVisibility(GONE);
+                parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             });
         };
         return new Thread(registerTask);
@@ -125,7 +128,6 @@ public class AuthFragment extends Fragment {
                             .replace(R.id.fragment_container, ProfileFragment.class, null)
                             .commit();
                 } else {
-                    Log.e("AZZA", response.toString());
                     new Handler(Looper.getMainLooper()).post(() -> {
                         Toast.makeText(view.getContext(), "Неправильная почта/пароль", Toast.LENGTH_LONG).show();
                     });
@@ -135,9 +137,8 @@ public class AuthFragment extends Fragment {
             }
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                submit_button.setClickable(true);
-                mode_switch.setClickable(true);
                 loading_progress_bar.setVisibility(GONE);
+                parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             });
         };
 
