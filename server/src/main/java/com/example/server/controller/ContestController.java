@@ -19,8 +19,15 @@ public class ContestController {
     }
 
     @GetMapping
-    public List<Contest> getContestsBySubjects(@RequestBody List<String> subjects_names) {
+    public List<Contest> getContestsBySubjects(@RequestParam List<String> subjects_names) {
         return contestService.getContestBySubjects(subjects_names);
+    }
+
+    @PostMapping("/admin")
+    public void createContests(@RequestBody List<Contest> contests) {
+        for (Contest contest : contests) {
+            contestService.createContest(contest);
+        }
     }
 
     @PostMapping

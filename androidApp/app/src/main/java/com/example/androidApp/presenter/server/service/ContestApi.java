@@ -7,8 +7,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface ContestApi {
     @GET("api/contests")
-    Call<List<Contest>> getContestsBySubjects(@Body List<String> subjects_names);
+    Call<List<Contest>> getContestsBySubjects(@Query("subjects_names") List<String> subjects_names);
 }

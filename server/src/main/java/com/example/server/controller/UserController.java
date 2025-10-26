@@ -6,6 +6,7 @@ import com.example.server.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/users")
@@ -22,6 +23,11 @@ public class UserController {
     public User getUser(@RequestHeader("x-api-key") String key) {
         Long user_id = userKeyService.getUserIdByKey(key);
         return userService.getUser(user_id);
+    }
+
+    @GetMapping(path = "/all")
+    public List<User> getUsers() {
+        return userService.getAllUsers();
     }
 
     @PostMapping

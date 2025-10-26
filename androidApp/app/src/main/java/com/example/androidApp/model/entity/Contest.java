@@ -1,8 +1,11 @@
 package com.example.androidApp.model.entity;
 
 
+import com.example.androidApp.model.DateConverter;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Contest {
@@ -33,6 +36,60 @@ public class Contest {
         this.up_grade = up_grade;
         this.archived = archived;
     }
+
+    public Contest(long id, String title, int lvl, String date_start, String date_end, String link, int low_grade, int up_grade, boolean archived) {
+        this.id = id;
+        this.title = title;
+        this.lvl = lvl;
+        this.date_start = DateConverter.string2Date(date_start, null);
+        this.date_end = DateConverter.string2Date(date_end, null);
+        this.link = link;
+        this.low_grade = low_grade;
+        this.up_grade = up_grade;
+        this.archived = archived;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Contest other = (Contest) obj;
+
+        if (!Objects.equals(id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(lvl, other.lvl)) {
+            return false;
+        }
+        if (!date_start.equals(other.date_start)) {
+            return false;
+        }
+        if (!date_end.equals(other.date_end)) {
+            return false;
+        }
+        if (!Objects.equals(link, other.link)) {
+            return false;
+        }
+        if (!Objects.equals(low_grade, other.low_grade)) {
+            return false;
+        }
+
+        return Objects.equals(up_grade, other.up_grade);
+    }
+
 
     public Long getId() {
         return id;
