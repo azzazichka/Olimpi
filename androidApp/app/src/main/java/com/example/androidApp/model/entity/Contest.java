@@ -1,14 +1,17 @@
 package com.example.androidApp.model.entity;
 
 
+
+
 import com.example.androidApp.model.DateConverter;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 
-public class Contest {
+public class Contest implements Serializable {
     private Long id;
 
     private String title;

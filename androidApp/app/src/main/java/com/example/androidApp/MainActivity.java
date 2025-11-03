@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         LiveData<Boolean> authData = UserAuth.getInstance().getAuthData();
         authData.observe(this, authed -> {
+            Log.i("AZZA", "onCreate: auth " + authed);
             if (Boolean.FALSE.equals(authed)) {
                 logOutUser();
             } else {

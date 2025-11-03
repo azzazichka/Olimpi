@@ -19,21 +19,27 @@ import java.util.Date;
 import java.util.List;
 
 public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHolder> {
+    private final RecyclerViewInterface recyclerViewInterface;
     private final LayoutInflater inflater;
     private final List<Contest> contests;
 
-    public ContestAdapter(Context context) {
+    public List<Contest> getContests() {
+        return contests;
+    }
+
+    public ContestAdapter(Context context, RecyclerViewInterface recyclerViewInterface) {
         setHasStableIds(true);
 
         this.contests = new ArrayList<>();
         this.inflater = LayoutInflater.from(context);
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
     public ContestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.contest_list_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -72,12 +78,23 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleView, lvlView, dateView, gradeView;
 
-        ViewHolder(View view){
+        ViewHolder(View view, RecyclerViewInterface recyclerViewInterface){
             super(view);
             titleView = view.findViewById(R.id.contest_title);
             lvlView = view.findViewById(R.id.contest_lvl);
             dateView = view.findViewById(R.id.contest_date);
             gradeView = view.findViewById(R.id.contest_grade);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewInterface != null) {
+                        int pos = getBindingAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 

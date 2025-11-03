@@ -48,7 +48,6 @@ public class ServerRequests {
             public void onFailure(@NonNull Call<List<Contest>> call, @NonNull Throwable t) {
                 Log.e("AZZA", "Failure with updating contest_list: " + t.toString());
             }
-
         });
     }
 
