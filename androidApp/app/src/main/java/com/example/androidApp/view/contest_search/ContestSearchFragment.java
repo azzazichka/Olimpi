@@ -45,12 +45,9 @@ public class ContestSearchFragment extends Fragment {
 
         ServerRequests.getInstance().updateContestsListBySubjects(subjects);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                ServerRequests.getInstance().updateContestsListBySubjects(subjects);
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            ServerRequests.getInstance().updateContestsListBySubjects(subjects);
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 }

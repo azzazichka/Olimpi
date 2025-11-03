@@ -58,4 +58,6 @@ dependencies {
     implementation(libs.converter.scalars);
 
     implementation(libs.swiperefreshlayout)
+
+    implementation("com.google.android.material:material:1.13.0")
 }
