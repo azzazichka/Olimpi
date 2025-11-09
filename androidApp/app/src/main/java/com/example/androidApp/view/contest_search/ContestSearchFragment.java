@@ -1,6 +1,5 @@
 package com.example.androidApp.view.contest_search;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.presenter.ServerRequests;
 import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
@@ -43,8 +43,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
 
         List<String> subjects = new ArrayList<>();
-        subjects.add("математика");
-        subjects.add("информатика");
+        subjects.add("астрономия");
         subjects.add("физика");
 
         ServerRequests.getInstance().updateContestsListBySubjects(subjects);

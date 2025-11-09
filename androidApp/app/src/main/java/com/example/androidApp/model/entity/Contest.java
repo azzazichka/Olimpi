@@ -3,6 +3,8 @@ package com.example.androidApp.model.entity;
 
 
 
+import androidx.annotation.NonNull;
+
 import com.example.androidApp.model.DateConverter;
 
 import java.io.Serializable;
@@ -172,6 +174,16 @@ public class Contest implements Serializable {
 
     public void setSubjects(List<String> subjects) {
         this.subjects = subjects;
+    }
+
+    @Override
+    public String toString() {
+        return "\ndate_start=" + DateConverter.date2String(date_start, "dd.MM.yy") +
+                "\ndate_end=" + DateConverter.date2String(date_end, "dd.MM.yy") +
+                "\nlink=" + link +
+                "\nlow_grade=" + low_grade +
+                "\nup_grade=" + up_grade +
+                "\nsubjects=" + subjects;
     }
 }
 

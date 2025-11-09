@@ -5,9 +5,7 @@ import com.example.server.repository.contest.ContestRepository;
 import com.example.server.repository.subject.Subject;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ContestService {
@@ -66,12 +64,21 @@ public class ContestService {
     public List<Contest> getContestBySubjects(List<String> subjects_names) {
         List<Subject> subjects = subjectService.getSubjects(subjects_names);
         List<Contest> contests = new ArrayList<>();
+        HashMap<Long, Contest> contest = new HashMap<>();
 
         for (Subject subject : subjects) {
-            Contest contest = getContest(subject.getContest_id());
-            contests.add(contest);
+            Contest tmp_contest = getContest(subject.getContest_id());
+            if (!contest.containsKey(tmp_contest.getId())) {
+                tmp_contest.setSubjects(new ArrayList<>());
+                contest.put(tmp_contest.getId(), tmp_contest);
+            }
+            tmp_contest = contest.get(tmp_contest.getId());
+            tmp_contest.addSubject(subject.getSubject());
+            contest.put(tmp_contest.getId(), tmp_contest);
         }
-
+        for (Map.Entry<Long, Contest> entry : contest.entrySet()) {
+            contests.add(entry.getValue());
+        }
         return contests;
     }
 }

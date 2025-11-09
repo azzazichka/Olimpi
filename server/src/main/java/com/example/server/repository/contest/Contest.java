@@ -32,6 +32,10 @@ public class Contest {
 
     @Transient
     List<String> subjects;
+
+    public void addSubject(String subject) {
+        subjects.add(subject);
+    }
 }
 
 

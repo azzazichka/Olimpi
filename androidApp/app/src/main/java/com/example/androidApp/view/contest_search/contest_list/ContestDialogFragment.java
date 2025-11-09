@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class ContestDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contest_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_dialog_contest_info, container, false);
 
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -48,9 +49,22 @@ public class ContestDialogFragment extends DialogFragment {
         }
 
         TextView contest_title = view.findViewById(R.id.contest_title_dialog);
+        TextView contest_lvl = view.findViewById(R.id.contest_lvl_dialog);
+        TextView contest_info = view.findViewById(R.id.contest_info_dialog);
+        ImageButton close_btn = view.findViewById(R.id.btn_close_dialog);
+        ImageButton add_btn = view.findViewById(R.id.btn_add_dialog);
+
+
         if (contest != null) {
             contest_title.setText(contest.getTitle());
+            contest_lvl.setText(contest.getLvl().toString() + "ур");
+            contest_info.setText(contest.toString());
         }
+
+        close_btn.setOnClickListener(v -> dismiss());
+        add_btn.setOnClickListener(v -> {
+
+        });
         return view;
     }
 }
