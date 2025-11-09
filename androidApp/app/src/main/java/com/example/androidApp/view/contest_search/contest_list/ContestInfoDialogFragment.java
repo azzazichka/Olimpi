@@ -17,10 +17,10 @@ import androidx.fragment.app.DialogFragment;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidapp.R;
 
-public class ContestDialogFragment extends DialogFragment {
+public class ContestInfoDialogFragment extends DialogFragment {
 
-    public static ContestDialogFragment newInstance(Contest contest) {
-        ContestDialogFragment fragment = new ContestDialogFragment();
+    public static ContestInfoDialogFragment newInstance(Contest contest) {
+        ContestInfoDialogFragment fragment = new ContestInfoDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable("contest", contest);
         fragment.setArguments(args);
@@ -63,7 +63,9 @@ public class ContestDialogFragment extends DialogFragment {
 
         close_btn.setOnClickListener(v -> dismiss());
         add_btn.setOnClickListener(v -> {
-
+            ContestAddDialogFragment customDialog = ContestAddDialogFragment.newInstance(contest);
+            customDialog.show(getParentFragmentManager(), "contest add dialog");
+            dismiss();
         });
         return view;
     }

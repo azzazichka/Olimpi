@@ -10,11 +10,10 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.presenter.ServerRequests;
 import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
-import com.example.androidApp.view.contest_search.contest_list.ContestDialogFragment;
+import com.example.androidApp.view.contest_search.contest_list.ContestInfoDialogFragment;
 import com.example.androidApp.view.contest_search.contest_list.RecyclerViewInterface;
 import com.example.androidapp.R;
 
@@ -57,7 +56,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
     @Override
     public void onItemClick(int position) {
         Contest clicked_contest = adapter.getContests().get(position);
-        ContestDialogFragment customDialog = ContestDialogFragment.newInstance(clicked_contest);
+        ContestInfoDialogFragment customDialog = ContestInfoDialogFragment.newInstance(clicked_contest);
         customDialog.show(getParentFragmentManager(), "contest dialog");
     }
 }

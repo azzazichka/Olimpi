@@ -25,6 +25,10 @@ public class UserEvent {
         this.contest_id = contest_id;
     }
 
+    public UserEvent() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -63,6 +67,18 @@ public class UserEvent {
 
     public void setNotification_time(Date notification_time) {
         this.notification_time = notification_time;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEvent{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", start_time=" + start_time +
+                ", end_time=" + end_time +
+                ", notification_time=" + notification_time +
+                ", contest_id=" + contest_id +
+                '}';
     }
 
     public Long getContest_id() {
