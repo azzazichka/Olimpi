@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.androidApp.MainActivity;
-import com.example.androidApp.presenter.UserAuth;
+import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidapp.R;
 
 public class ProfileFragment extends Fragment {

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidApp.model.entity.Contest;
-import com.example.androidApp.presenter.ServerRequests;
+import com.example.androidApp.presenter.server.requests.ContestRequests;
 import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
 import com.example.androidApp.view.contest_search.contest_list.ContestInfoDialogFragment;
 import com.example.androidApp.view.contest_search.contest_list.RecyclerViewInterface;
@@ -38,17 +38,17 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setAdapter(adapter);
 
-        contestsData = ServerRequests.getInstance().getContestsData();
+        contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
 
         List<String> subjects = new ArrayList<>();
         subjects.add("астрономия");
         subjects.add("физика");
 
-        ServerRequests.getInstance().updateContestsListBySubjects(subjects);
+        ContestRequests.getInstance().updateContestsListBySubjects(subjects);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            ServerRequests.getInstance().updateContestsListBySubjects(subjects);
+            ContestRequests.getInstance().updateContestsListBySubjects(subjects);
             swipeRefreshLayout.setRefreshing(false);
         });
     }

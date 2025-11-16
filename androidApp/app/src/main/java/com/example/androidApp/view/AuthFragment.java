@@ -1,20 +1,16 @@
 package com.example.androidApp.view;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +20,7 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.example.androidApp.MainActivity;
-import com.example.androidApp.presenter.UserAuth;
-import com.example.androidApp.presenter.server.ServiceGenerator;
+import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidapp.R;
 
 import java.io.IOException;
@@ -63,7 +58,7 @@ public class AuthFragment extends Fragment {
     }
 
     private void submit(@NonNull View view) {
-        MainActivity.showLoad(loading_progress_bar, requireActivity());
+        ((MainActivity) requireActivity()).showLoad(loading_progress_bar);
 
         parentActivity.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -101,7 +96,7 @@ public class AuthFragment extends Fragment {
 
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                MainActivity.hideLoad(loading_progress_bar, requireActivity());
+                ((MainActivity) requireActivity()).hideLoad(loading_progress_bar);
             });
         };
         return new Thread(registerTask);
@@ -136,7 +131,7 @@ public class AuthFragment extends Fragment {
             }
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                MainActivity.hideLoad(loading_progress_bar, requireActivity());
+                ((MainActivity) requireActivity()).hideLoad(loading_progress_bar);
             });
         };
 

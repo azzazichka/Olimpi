@@ -1,4 +1,4 @@
-package com.example.androidApp.presenter;
+package com.example.androidApp.presenter.server.requests;
 
 import android.util.Log;
 
@@ -16,14 +16,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ServerRequests {
-    private static ServerRequests instance;
+public class ContestRequests {
+    private static ContestRequests instance;
     MutableLiveData<List<Contest>> contestsData = new MutableLiveData<>();
 
 
-    public static ServerRequests getInstance() {
+    public static ContestRequests getInstance() {
         if (instance == null) {
-            instance = new ServerRequests();
+            instance = new ContestRequests();
         }
         return instance;
     }

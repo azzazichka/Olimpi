@@ -1,4 +1,4 @@
-package com.example.androidApp.presenter;
+package com.example.androidApp.presenter.server.requests;
 
 import android.util.Log;
 

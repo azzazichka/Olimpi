@@ -1,7 +1,6 @@
 package com.example.androidApp;
 
 import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.app.Activity;
@@ -14,14 +13,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
-import com.example.androidApp.presenter.UserAuth;
+import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidApp.view.AuthFragment;
 import com.example.androidApp.view.contest_search.ContestSearchFragment;
 import com.example.androidApp.view.contest_search.SearchFilterFragment;
@@ -33,6 +31,11 @@ import com.example.androidapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationBarView;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     SharedPreferences sharedPref;
@@ -82,21 +85,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
             }
 
-            hideLoad(loading_progress_bar, this);
+            hideLoad(loading_progress_bar);
         });
 
-        showLoad(loading_progress_bar, this);
+        showLoad(loading_progress_bar);
         UserAuth.getInstance().userAuth(sharedPref.getString("api_key", ""));
     }
 
-    public static void hideLoad(ContentLoadingProgressBar loading_progress_bar, Activity activity) {
+    public void hideLoad(ContentLoadingProgressBar loading_progress_bar) {
         loading_progress_bar.hide();
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-    public static void showLoad(ContentLoadingProgressBar loading_progress_bar, Activity activity) {
+    public void showLoad(ContentLoadingProgressBar loading_progress_bar) {
         loading_progress_bar.show();
-        activity.getWindow().setFlags(
+        this.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
@@ -149,5 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
+
+
 
 }

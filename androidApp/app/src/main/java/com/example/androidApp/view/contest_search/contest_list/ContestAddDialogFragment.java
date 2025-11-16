@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -39,8 +40,8 @@ public class ContestAddDialogFragment extends DialogFragment {
     Contest contest;
     UserEvent userEvent = new UserEvent();
     Calendar date = Calendar.getInstance();
-    ImageButton clear_date;
-    TextView date_text_view;
+    ImageButton clear_date, clear_notification;
+    TextView date_text_view, notification_text_view;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,9 +65,14 @@ public class ContestAddDialogFragment extends DialogFragment {
         TextView contest_title = view.findViewById(R.id.contest_title_dialog);
         ImageButton close_btn = view.findViewById(R.id.btn_close_dialog);
         ImageButton add_btn = view.findViewById(R.id.btn_add_dialog);
+
         clear_date = view.findViewById(R.id.btn_clear_date);
         date_text_view = view.findViewById(R.id.date_text_view);
         TextView date_picker = view.findViewById(R.id.date_picker);
+
+        clear_notification = view.findViewById(R.id.btn_clear_notification);
+        notification_text_view = view.findViewById(R.id.notification_text_view);
+        TextView notification_picker = view.findViewById(R.id.notification_picker);
 
         if (contest != null) {
             contest_title.setText(contest.getTitle());
@@ -81,63 +87,128 @@ public class ContestAddDialogFragment extends DialogFragment {
             userEvent.setStart_time(null);
             userEvent.setEnd_time(null);
         });
-        date_picker.setOnClickListener(v -> {
-            showDatePickers();
+
+        clear_notification.setOnClickListener(v -> {
+            notification_text_view.setText("");
+            clear_notification.setVisibility(GONE);
+            notification_text_view.setVisibility(GONE);
+            userEvent.setNotification_time(null);
         });
+
+        date_picker.setOnClickListener(v -> showDatePickers());
+        notification_picker.setOnClickListener(v -> showNotificationPickers());
+
 
         close_btn.setOnClickListener(v -> dismiss());
         add_btn.setOnClickListener(v -> {
+
+
             dismiss();
         });
         return view;
     }
 
-    private TimePickerDialog createTimePickerDialog(Calendar currentCalendar,
-                                                    TimePickerDialog.OnTimeSetListener listener) {
-        return new TimePickerDialog(
-                requireContext(),
-                listener,
-                currentCalendar.get(Calendar.HOUR_OF_DAY),
-                currentCalendar.get(Calendar.MINUTE),
-                true);
-    }
+
     private void showDatePickers() {
         Calendar currentCalendar = Calendar.getInstance();
 
-        TimePickerDialog timeEndPickerDialog = createTimePickerDialog(currentCalendar,
-            (TimePicker view, int hourOfDay, int minute) -> {
-                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                date.set(Calendar.MINUTE, minute);
-                userEvent.setEnd_time(date.getTime());
+        TimePickerDialog.OnTimeSetListener listenerTimeEnd =
+        (view, hourOfDay, minute) -> {
+            date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            date.set(Calendar.MINUTE, minute);
+            userEvent.setEnd_time(date.getTime());
 
-                date_text_view.setVisibility(VISIBLE);
-                String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
-                        '\n' + DateConverter.date2String(userEvent.getStart_time(), "hh:mm") +
-                        "-" + DateConverter.date2String(userEvent.getEnd_time(), "hh:mm");
-                date_text_view.setText(text);
-                clear_date.setVisibility(VISIBLE);
-        });
-        TimePickerDialog timeStartPickerDialog = createTimePickerDialog(currentCalendar,
-            (TimePicker view, int hourOfDay, int minute) -> {
+            date_text_view.setVisibility(VISIBLE);
+            String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
+                    '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
+                    "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
+            date_text_view.setText(text);
+            clear_date.setVisibility(VISIBLE);
+        };
 
-                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                date.set(Calendar.MINUTE, minute);
-                userEvent.setStart_time(date.getTime());
-                view.setVisibility(GONE);
-                timeEndPickerDialog.show();
-        });
+
+        TimePickerDialog timeEndPickerDialog = new TimePickerDialog(
+                requireContext(),
+                listenerTimeEnd,
+                currentCalendar.get(Calendar.HOUR_OF_DAY),
+                currentCalendar.get(Calendar.MINUTE),
+                true);
+
+
+        TimePickerDialog.OnTimeSetListener listenerTimeStart =
+                (view, hourOfDay, minute) -> {
+                    date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    date.set(Calendar.MINUTE, minute);
+                    userEvent.setStart_time(date.getTime());
+                    timeEndPickerDialog.show();
+                };
+
+
+        TimePickerDialog timeStartPickerDialog = new TimePickerDialog(
+                requireContext(),
+                listenerTimeStart,
+                currentCalendar.get(Calendar.HOUR_OF_DAY),
+                currentCalendar.get(Calendar.MINUTE),
+                true);
+
+        DatePickerDialog.OnDateSetListener listenerDay =
+            (view, year, month, dayOfMonth) -> {
+                date.set(Calendar.YEAR, year);
+                date.set(Calendar.MONTH, month);
+                date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                timeStartPickerDialog.show();
+            };
+
+
         DatePickerDialog dayPickerDialog = new DatePickerDialog(
                 requireContext(),
+                listenerDay,
+                currentCalendar.get(Calendar.YEAR),
+                currentCalendar.get(Calendar.MONTH),
+                currentCalendar.get(Calendar.DAY_OF_MONTH));
+        dayPickerDialog.show();
+    }
+
+    private void showNotificationPickers() {
+        Calendar currentCalendar = Calendar.getInstance();
+
+        TimePickerDialog.OnTimeSetListener listenerTime =
+                (view, hourOfDay, minute) -> {
+                    date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    date.set(Calendar.MINUTE, minute);
+                    userEvent.setNotification_time(date.getTime());
+
+                    notification_text_view.setVisibility(VISIBLE);
+
+                    String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
+                            " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
+                    notification_text_view.setText(text);
+                    clear_notification.setVisibility(VISIBLE);
+                };
+
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                requireContext(),
+                listenerTime,
+                currentCalendar.get(Calendar.HOUR_OF_DAY),
+                currentCalendar.get(Calendar.MINUTE),
+                true);
+
+        DatePickerDialog.OnDateSetListener listenerDay =
                 (view, year, month, dayOfMonth) -> {
                     date.set(Calendar.YEAR, year);
                     date.set(Calendar.MONTH, month);
                     date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    view.setVisibility(GONE);
-                    timeStartPickerDialog.show();
-                },
+                    timePickerDialog.show();
+                };
+
+
+        DatePickerDialog dayPickerDialog = new DatePickerDialog(
+                requireContext(),
+                listenerDay,
                 currentCalendar.get(Calendar.YEAR),
                 currentCalendar.get(Calendar.MONTH),
-                currentCalendar.get(Calendar.DAY_OF_MONTH));;
+                currentCalendar.get(Calendar.DAY_OF_MONTH));
         dayPickerDialog.show();
     }
 }
