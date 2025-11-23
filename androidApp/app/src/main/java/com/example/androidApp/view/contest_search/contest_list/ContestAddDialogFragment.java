@@ -159,6 +159,7 @@ public class ContestAddDialogFragment extends DialogFragment {
                     "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
             date_text_view.setText(text);
             clear_date.setVisibility(VISIBLE);
+            view.setVisibility(GONE);
         };
 
 
@@ -176,6 +177,7 @@ public class ContestAddDialogFragment extends DialogFragment {
                     date.set(Calendar.MINUTE, minute);
                     userEvent.setStart_time(date.getTime());
                     timeEndPickerDialog.show();
+                    view.setVisibility(GONE);
                 };
 
 
@@ -192,6 +194,7 @@ public class ContestAddDialogFragment extends DialogFragment {
                 date.set(Calendar.MONTH, month);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 timeStartPickerDialog.show();
+                view.setVisibility(GONE);
             };
 
 
@@ -219,6 +222,7 @@ public class ContestAddDialogFragment extends DialogFragment {
                             " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
                     notification_text_view.setText(text);
                     clear_notification.setVisibility(VISIBLE);
+                    view.setVisibility(GONE);
                 };
 
 
@@ -235,6 +239,7 @@ public class ContestAddDialogFragment extends DialogFragment {
                     date.set(Calendar.MONTH, month);
                     date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     timePickerDialog.show();
+                    view.setVisibility(GONE);
                 };
 
 
