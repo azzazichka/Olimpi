@@ -122,13 +122,16 @@ public class ContestAddDialogFragment extends DialogFragment {
             UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
             MainActivity mainActivity = (MainActivity) getActivity();
 
-            compositeDisposable.add(RequestGenerator.makeApiCall(
-                    mainActivity,
-                    userEventApi.createUserEvent(userEvent),
-                    response -> {
-                        dismiss();
-                    }
-            ));
+            compositeDisposable.add(
+                    RequestGenerator.makeApiCall(
+                        mainActivity,
+                        "Олимпиада добавлена",
+                        "Ошибка",
+                        userEventApi.createUserEvent(userEvent),
+                        response -> {
+                            dismiss();
+                        })
+            );
 
 
         });

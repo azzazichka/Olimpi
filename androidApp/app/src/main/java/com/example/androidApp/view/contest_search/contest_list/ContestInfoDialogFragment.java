@@ -1,5 +1,7 @@
 package com.example.androidApp.view.contest_search.contest_list;
 
+import static android.view.View.VISIBLE;
+
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,26 +16,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
+import com.example.androidApp.presenter.server.RequestGenerator;
+import com.example.androidApp.presenter.server.ServiceGenerator;
+import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidapp.R;
 
-public class ContestInfoDialogFragment extends DialogFragment {
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-    public static ContestInfoDialogFragment newInstance(Contest contest) {
+public class ContestInfoDialogFragment extends DialogFragment {
+    public static ContestInfoDialogFragment newInstance(Contest contest, Long userEventId) {
         ContestInfoDialogFragment fragment = new ContestInfoDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable("contest", contest);
+        args.putLong("user event id", userEventId);
         fragment.setArguments(args);
         return fragment;
     }
 
     Contest contest;
+    Long userEventId;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             contest = (Contest) getArguments().getSerializable("contest");
+            userEventId = getArguments().getLong("user event id");
         }
     }
 
@@ -53,6 +64,7 @@ public class ContestInfoDialogFragment extends DialogFragment {
         TextView contest_info = view.findViewById(R.id.contest_info_dialog);
         ImageButton close_btn = view.findViewById(R.id.btn_close_dialog);
         ImageButton add_btn = view.findViewById(R.id.btn_add_dialog);
+        ImageButton delete_btn = view.findViewById(R.id.btn_delete_dialog);
 
 
         if (contest != null) {
@@ -62,11 +74,39 @@ public class ContestInfoDialogFragment extends DialogFragment {
         }
 
         close_btn.setOnClickListener(v -> dismiss());
-        add_btn.setOnClickListener(v -> {
-            ContestAddDialogFragment customDialog = ContestAddDialogFragment.newInstance(contest);
-            customDialog.show(getParentFragmentManager(), "contest add dialog");
-            dismiss();
-        });
+
+        if (userEventId != -1) {
+            delete_btn.setVisibility(VISIBLE);
+            MainActivity mainActivity = (MainActivity) requireActivity();
+            UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
+
+            delete_btn.setOnClickListener(v -> {
+                compositeDisposable.add(
+                        RequestGenerator.makeApiCall(
+                                mainActivity,
+                                "Событие удалено успешно",
+                                "Ошибка",
+                                userEventApi.deleteUserEvent(userEventId),
+                                response -> {
+                                    dismiss();
+                                }
+                        )
+                );
+            });
+        } else {
+            add_btn.setVisibility(VISIBLE);
+            add_btn.setOnClickListener(v -> {
+                ContestAddDialogFragment customDialog = ContestAddDialogFragment.newInstance(contest);
+                customDialog.show(getParentFragmentManager(), "contest add dialog");
+                dismiss();
+            });
+        }
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        compositeDisposable.dispose();
     }
 }

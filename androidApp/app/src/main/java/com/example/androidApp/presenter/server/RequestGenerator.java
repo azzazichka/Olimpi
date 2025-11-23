@@ -1,6 +1,9 @@
 package com.example.androidApp.presenter.server;
 
+import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.example.androidApp.MainActivity;
 
@@ -15,6 +18,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class RequestGenerator {
     public static <T> Disposable makeApiCall(
             MainActivity mainActivity,
+            @Nullable String onSuccessMessage,
+            @Nullable String onErrorMessage,
             Single<T> apiCall,
             Consumer<T> onSuccessCallback) {
 
@@ -30,7 +35,9 @@ public class RequestGenerator {
 
                     @Override
                     public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull T response) {
-                        Toast.makeText(mainActivity.getApplicationContext(), "Успешно", Toast.LENGTH_SHORT).show();
+                        if (onSuccessMessage != null)
+                            Toast.makeText(mainActivity.getApplicationContext(), onSuccessMessage, Toast.LENGTH_LONG).show();
+
                         mainActivity.hideLoad();
 
                         if (onSuccessCallback != null) {
@@ -40,8 +47,10 @@ public class RequestGenerator {
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        Toast.makeText(mainActivity.getApplicationContext(), "Ошибка", Toast.LENGTH_SHORT).show();
+                        if (onErrorMessage != null)
+                            Toast.makeText(mainActivity.getApplicationContext(), onErrorMessage, Toast.LENGTH_LONG).show();
                         mainActivity.hideLoad();
+                        Log.e("AZZA", e.toString());
 
                     }
                 });

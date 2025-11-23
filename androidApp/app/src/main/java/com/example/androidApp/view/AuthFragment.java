@@ -74,29 +74,36 @@ public class AuthFragment extends Fragment {
         if (LOGIN_MODE) {
             UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
 
-            compositeDisposable.add(RequestGenerator.makeApiCall(
-                    mainActivity,
-                    userKeyApi.getUserKey(email, password),
-                    key -> {
+            compositeDisposable.add(
+                    RequestGenerator.makeApiCall(
+                        mainActivity,
+                        "Вход успешен",
+                        "Неправильная почта/пароль",
+                        userKeyApi.getUserKey(email, password),
+                        key -> {
 
-                        editor.putString("api_key", key);
-                        editor.apply();
+                            editor.putString("api_key", key);
+                            editor.apply();
 
-                        assert key != null;
-                        UserAuth.getInstance().userAuth(key);
-                    }));
+                            assert key != null;
+                            UserAuth.getInstance().userAuth(key);
+                        })
+            );
         } else {
             UserApi userApi = ServiceGenerator.createService(UserApi.class);
             User user = new User(null, "", email, password, 0);
 
-            compositeDisposable.add(RequestGenerator.makeApiCall(
-                    mainActivity,
-                    userApi.registerUser(user),
-                    response -> {
-                        mode_switch.setChecked(false);
+            compositeDisposable.add(
+                    RequestGenerator.makeApiCall(
+                        mainActivity,
+                        "Регистрация успешна",
+                            "Ошибка",
+                            userApi.registerUser(user),
+                            response -> {
+                            mode_switch.setChecked(false);
 
-                    }
-            ));
+                        })
+            );
         }
     }
     // TODO: check time sleep moment
