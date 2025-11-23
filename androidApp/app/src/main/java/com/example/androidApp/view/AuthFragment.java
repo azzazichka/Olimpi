@@ -20,21 +20,31 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.example.androidApp.MainActivity;
+import com.example.androidApp.model.entity.User;
+import com.example.androidApp.presenter.server.RequestGenerator;
+import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.presenter.server.requests.UserAuth;
+import com.example.androidApp.presenter.server.service.UserApi;
+import com.example.androidApp.presenter.server.service.UserKeyApi;
 import com.example.androidapp.R;
 
 import java.io.IOException;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Response;
 
 
 public class AuthFragment extends Fragment {
-    private Button submit_button;
     private EditText email_edit_text, password_edit_text;
     private SwitchCompat mode_switch;
-    private ContentLoadingProgressBar loading_progress_bar;
-    private Activity parentActivity;
+    private SharedPreferences.Editor editor;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public AuthFragment() {
         super(R.layout.fragment_auth);
@@ -43,14 +53,12 @@ public class AuthFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        editor = requireActivity().getPreferences(MODE_PRIVATE).edit();
 
-        parentActivity = requireActivity();
-
-        submit_button = view.findViewById(R.id.submit);
+        Button submit_button = view.findViewById(R.id.submit);
         email_edit_text = view.findViewById(R.id.email);
         password_edit_text = view.findViewById(R.id.password);
         mode_switch = view.findViewById(R.id.mode);
-        loading_progress_bar = parentActivity.findViewById(R.id.loading);
 
         submit_button.setOnClickListener(v -> {
             submit(view);
@@ -58,83 +66,44 @@ public class AuthFragment extends Fragment {
     }
 
     private void submit(@NonNull View view) {
-        ((MainActivity) requireActivity()).showLoad(loading_progress_bar);
-
-        parentActivity.getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String email = email_edit_text.getText().toString();
+        String password = password_edit_text.getText().toString();
         final boolean LOGIN_MODE = !mode_switch.isChecked();
+
         if (LOGIN_MODE) {
-            Thread logInThread = getLogInThread(view);
-            logInThread.start();
+            UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
+
+            compositeDisposable.add(RequestGenerator.makeApiCall(
+                    mainActivity,
+                    userKeyApi.getUserKey(email, password),
+                    key -> {
+
+                        editor.putString("api_key", key);
+                        editor.apply();
+
+                        assert key != null;
+                        UserAuth.getInstance().userAuth(key);
+                    }));
         } else {
-            Thread registerThread = getRegisterThread(view);
-            registerThread.start();
+            UserApi userApi = ServiceGenerator.createService(UserApi.class);
+            User user = new User(null, "", email, password, 0);
+
+            compositeDisposable.add(RequestGenerator.makeApiCall(
+                    mainActivity,
+                    userApi.registerUser(user),
+                    response -> {
+                        mode_switch.setChecked(false);
+
+                    }
+            ));
         }
     }
+    // TODO: check time sleep moment
 
-    @NonNull
-    private Thread getRegisterThread(@NonNull View view) {
-        Runnable registerTask = () -> {
-            try {
-                Response<ResponseBody> response = UserAuth.getInstance().register(email_edit_text.getText().toString(), password_edit_text.getText().toString());
-                if (response.isSuccessful()) {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        mode_switch.setChecked(false);
-                        Toast.makeText(view.getContext(), "Аккаунт создан успешно", Toast.LENGTH_LONG).show();
-                    });
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        Toast.makeText(view.getContext(), "Данный email занят", Toast.LENGTH_LONG).show();
-                    });
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
-            new Handler(Looper.getMainLooper()).post(() -> {
-                ((MainActivity) requireActivity()).hideLoad(loading_progress_bar);
-            });
-        };
-        return new Thread(registerTask);
-    }
-
-    @NonNull
-    private Thread getLogInThread(@NonNull View view) {
-        Runnable logInTask = () -> {
-            try {
-                Response<String> response = UserAuth.getInstance().logIn(email_edit_text.getText().toString(), password_edit_text.getText().toString());
-                if (response.isSuccessful()) {
-                    assert getActivity() != null;
-
-                    SharedPreferences sharedPref = getActivity().getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-
-                    String key = response.body();
-
-                    editor.putString("api_key", key);
-                    editor.apply();
-
-                    assert key != null;
-                    UserAuth.getInstance().userAuth(key);
-
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        Toast.makeText(view.getContext(), "Неправильная почта/пароль", Toast.LENGTH_LONG).show();
-                    });
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            new Handler(Looper.getMainLooper()).post(() -> {
-                ((MainActivity) requireActivity()).hideLoad(loading_progress_bar);
-            });
-        };
-
-        return new Thread(logInTask);
+    @Override
+    public void onStop() {
+        super.onStop();
+        compositeDisposable.dispose();
     }
 }

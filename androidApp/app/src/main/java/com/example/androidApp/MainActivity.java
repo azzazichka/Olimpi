@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.function.Consumer;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableSingleObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,19 +93,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
             }
 
-            hideLoad(loading_progress_bar);
+            hideLoad();
         });
 
-        showLoad(loading_progress_bar);
+        showLoad();
         UserAuth.getInstance().userAuth(sharedPref.getString("api_key", ""));
     }
 
-    public void hideLoad(ContentLoadingProgressBar loading_progress_bar) {
+    public void hideLoad() {
         loading_progress_bar.hide();
         this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-    public void showLoad(ContentLoadingProgressBar loading_progress_bar) {
+    public void showLoad() {
         loading_progress_bar.show();
         this.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -152,7 +160,4 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
-
-
-
 }

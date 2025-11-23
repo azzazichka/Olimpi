@@ -3,12 +3,14 @@ package com.example.androidApp.view.contest_search.contest_list;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +18,31 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.DateConverter;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
+import com.example.androidApp.presenter.server.RequestGenerator;
+import com.example.androidApp.presenter.server.ServiceGenerator;
+import com.example.androidApp.presenter.server.requests.UserAuth;
+import com.example.androidApp.presenter.server.service.ContestApi;
+import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidapp.R;
 
 import java.util.Calendar;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class ContestAddDialogFragment extends DialogFragment {
     public static ContestAddDialogFragment newInstance(Contest contest) {
@@ -42,6 +58,7 @@ public class ContestAddDialogFragment extends DialogFragment {
     Calendar date = Calendar.getInstance();
     ImageButton clear_date, clear_notification;
     TextView date_text_view, notification_text_view;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +66,7 @@ public class ContestAddDialogFragment extends DialogFragment {
         if (getArguments() != null) {
             contest = (Contest) getArguments().getSerializable("contest");
         }
+        userEvent.setUser_id(UserAuth.getInstance().getUser().getId());
     }
 
     @Nullable
@@ -101,13 +119,27 @@ public class ContestAddDialogFragment extends DialogFragment {
 
         close_btn.setOnClickListener(v -> dismiss());
         add_btn.setOnClickListener(v -> {
+            UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
+            MainActivity mainActivity = (MainActivity) getActivity();
+
+            compositeDisposable.add(RequestGenerator.makeApiCall(
+                    mainActivity,
+                    userEventApi.createUserEvent(userEvent),
+                    response -> {
+                        dismiss();
+                    }
+            ));
 
 
-            dismiss();
         });
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        compositeDisposable.dispose();
+    }
 
     private void showDatePickers() {
         Calendar currentCalendar = Calendar.getInstance();

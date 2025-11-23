@@ -16,7 +16,9 @@ public class UserEvent {
 
     private Long contest_id;
 
-    public UserEvent(Long id, String title, Date start_time, Date end_time, Date notification_time, Long contest_id) {
+    private Long user_id;
+
+    public UserEvent(Long id, String title, Date start_time, Date end_time, Date notification_time, Long contest_id, Long user_id) {
         this.id = id;
         this.title = title;
         this.start_time = start_time;
@@ -27,6 +29,14 @@ public class UserEvent {
 
     public UserEvent() {
 
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public Long getId() {

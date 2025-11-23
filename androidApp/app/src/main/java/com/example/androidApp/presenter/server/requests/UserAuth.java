@@ -73,22 +73,6 @@ public class UserAuth {
         });
     }
 
-    public Response<String> logIn(String email, String password) throws IOException {
-        UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
-        Call<String> logInCall = userKeyApi.getUserKey(email, password);
-
-        return logInCall.execute();
-    }
-
-    public Response<ResponseBody> register(String email, String password) throws IOException {
-        UserApi userApi = ServiceGenerator.createService(UserApi.class);
-        User user = new User(null, "Пользователь", email, password, 0);
-
-        Call<ResponseBody> registerCall = userApi.registerUser(user);
-
-        return registerCall.execute();
-    }
-
     public void logOut() {
         UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
 
@@ -110,6 +94,3 @@ public class UserAuth {
         });
     }
 }
-
-
-// TODO: переделать x-api-logic, сделать только один ключ у юзера, рассмотреть вариант, когда у двух юзеров одинаковый api ключ
