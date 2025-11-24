@@ -12,7 +12,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ServiceGenerator {
     private static final String BASE_URL = "http://192.168.1.112:8080/";
-    private static Retrofit.Builder builder = new Retrofit.Builder()
+    private static final Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(
@@ -23,7 +23,7 @@ public class ServiceGenerator {
 
     private static Retrofit retrofit = builder.build();
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     public static <S> S createService(Class<S> serviceClass) {
         return retrofit.create(serviceClass);

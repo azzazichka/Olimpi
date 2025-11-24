@@ -10,6 +10,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ContestApi {
-    @GET("api/contests")
+    @GET("api/contests/subjects")
     Call<List<Contest>> getContestsBySubjects(@Query("subjects_names") List<String> subjects_names);
+
+    @GET("api/contests/ids")
+    Call<List<Contest>> getContestsByIds(@Query("contestIds") List<Long> contestIds);
 }

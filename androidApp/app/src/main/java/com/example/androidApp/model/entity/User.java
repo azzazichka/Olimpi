@@ -78,7 +78,6 @@ public class User {
                 "id=" + id +
                 ",\nname='" + name +
                 ",\nemail='" + email +
-                ",\npassword='" + password +
                 ",\naccess_lvl=" + access_lvl +
                 ",\napi_key='" + api_key +
                 '}';

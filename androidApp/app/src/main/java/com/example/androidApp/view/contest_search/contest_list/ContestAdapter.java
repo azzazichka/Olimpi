@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidApp.model.DateConverter;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidapp.R;

@@ -1,4 +1,4 @@
-package com.example.androidApp.view.contest_search.contest_list;
+package com.example.androidApp;
 
 public interface RecyclerViewInterface {
     void onItemClick(int position);

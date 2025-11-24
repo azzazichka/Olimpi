@@ -81,4 +81,9 @@ public class ContestService {
         }
         return contests;
     }
+
+    public List<Contest> getContestsByIds(List<Long> contestIds) {
+        return contestRepository.findAllById(contestIds);
+
+    }
 }

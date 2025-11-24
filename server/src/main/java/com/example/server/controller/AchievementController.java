@@ -27,7 +27,7 @@ public class AchievementController {
     }
 
     @PostMapping
-    public void createAchievement(
+        public void createAchievement(
             @RequestBody Achievement achievement,
             @RequestHeader("x-api-key") String key
     ) throws IOException, AuthException {
@@ -38,10 +38,13 @@ public class AchievementController {
 
     @DeleteMapping
     public void deleteAchievement(
-            @RequestParam Long id, @RequestHeader("x-api-key") String key
+            @RequestParam Long contestId, @RequestHeader("x-api-key") String key
     ) throws IOException, AuthException {
-        userKeyService.checkAuthAchievement(achievementService.getAchievement(id), key);
+        Long userId = userKeyService.getUserIdByKey(key);
 
+
+        Long id = achievementService.getAchievementIdByUserIdAndContestId(userId, contestId);
         achievementService.deleteAchievementById(id);
     }
+
 }

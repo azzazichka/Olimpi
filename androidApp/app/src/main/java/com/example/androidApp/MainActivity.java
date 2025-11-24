@@ -3,7 +3,6 @@ package com.example.androidApp;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +22,7 @@ import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidApp.view.AuthFragment;
 import com.example.androidApp.view.contest_search.ContestSearchFragment;
 import com.example.androidApp.view.contest_search.SearchFilterFragment;
-import com.example.androidApp.view.profile.AchievementsFragment;
+import com.example.androidApp.view.profile.achievements.AchievementsFragment;
 import com.example.androidApp.view.profile.ProfileFragment;
 import com.example.androidApp.view.user_events.CalendarFragment;
 import com.example.androidApp.view.user_events.UserEventsFragment;
@@ -32,18 +30,6 @@ import com.example.androidapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.function.Consumer;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.observers.DisposableSingleObserver;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     SharedPreferences sharedPref;

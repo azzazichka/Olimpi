@@ -20,6 +20,7 @@ import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.ServiceGenerator;
+import com.example.androidApp.presenter.server.service.AchievementApi;
 import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidapp.R;
 
@@ -79,6 +80,7 @@ public class ContestInfoDialogFragment extends DialogFragment {
             delete_btn.setVisibility(VISIBLE);
             MainActivity mainActivity = (MainActivity) requireActivity();
             UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
+            AchievementApi achievementApi = ServiceGenerator.createService(AchievementApi.class);
 
             delete_btn.setOnClickListener(v -> {
                 compositeDisposable.add(
@@ -88,7 +90,13 @@ public class ContestInfoDialogFragment extends DialogFragment {
                                 "Ошибка",
                                 userEventApi.deleteUserEvent(userEventId),
                                 response -> {
-                                    dismiss();
+                                    RequestGenerator.makeApiCall(
+                                            mainActivity,
+                                            achievementApi.deleteAchievement(contest.getId()),
+                                            response2 -> {
+                                                dismiss();
+                                            }
+                                    );
                                 }
                         )
                 );

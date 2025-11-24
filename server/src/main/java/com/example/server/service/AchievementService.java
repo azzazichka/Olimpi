@@ -59,4 +59,8 @@ public class AchievementService {
         }
         return optionalAchievement.get();
     }
+
+    public Long getAchievementIdByUserIdAndContestId(Long userId, Long contestId) {
+        return achievementRepository.findByUserIdAndContestId(userId, contestId);
+    }
 }

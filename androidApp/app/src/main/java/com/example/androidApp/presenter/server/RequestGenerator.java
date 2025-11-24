@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 
 import com.example.androidApp.MainActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -16,6 +18,31 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RequestGenerator {
+    public static <T> Disposable makeApiCall(
+        MainActivity mainActivity,
+        Single<T> apiCall,
+        Consumer<T> onSuccessCallback) {
+        return makeApiCall(
+                mainActivity,
+                null,
+                "Ошибка",
+                apiCall,
+                onSuccessCallback);
+    }
+
+    public static <T> Disposable makeApiCall(
+        MainActivity mainActivity,
+        @NotNull String onSuccessMessage,
+        Single<T> apiCall,
+        Consumer<T> onSuccessCallback) {
+        return makeApiCall(
+                mainActivity,
+                onSuccessMessage,
+                "Ошибка",
+                apiCall,
+                onSuccessCallback);
+    }
+
     public static <T> Disposable makeApiCall(
             MainActivity mainActivity,
             @Nullable String onSuccessMessage,

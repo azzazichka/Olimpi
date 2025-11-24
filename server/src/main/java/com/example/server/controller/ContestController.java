@@ -3,9 +3,11 @@ package com.example.server.controller;
 import com.example.server.repository.contest.Contest;
 import com.example.server.service.ContestService;
 import com.example.server.service.UserKeyService;
+import jakarta.annotation.Nullable;
 import jakarta.security.auth.message.AuthException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,9 +20,15 @@ public class ContestController {
         this.userKeyService = userKeyService;
     }
 
-    @GetMapping
+    @GetMapping("/subjects")
     public List<Contest> getContestsBySubjects(@RequestParam List<String> subjects_names) {
         return contestService.getContestBySubjects(subjects_names);
+    }
+
+    @GetMapping("/ids")
+    public List<Contest> getContestsByIds(@RequestParam(required = false) List<Long> contestIds) {
+        if (contestIds == null) return new ArrayList<>();
+        return contestService.getContestsByIds(contestIds);
     }
 
     @PostMapping("/admin")

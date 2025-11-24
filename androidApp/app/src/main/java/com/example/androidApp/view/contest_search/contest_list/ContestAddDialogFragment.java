@@ -26,11 +26,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.DateConverter;
+import com.example.androidApp.model.entity.Achievement;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.presenter.server.requests.UserAuth;
+import com.example.androidApp.presenter.server.service.AchievementApi;
 import com.example.androidApp.presenter.server.service.ContestApi;
 import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidapp.R;
@@ -120,17 +122,23 @@ public class ContestAddDialogFragment extends DialogFragment {
         close_btn.setOnClickListener(v -> dismiss());
         add_btn.setOnClickListener(v -> {
             UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
+            AchievementApi achievementApi = ServiceGenerator.createService(AchievementApi.class);
             MainActivity mainActivity = (MainActivity) getActivity();
+            Achievement achievement = new Achievement(userEvent.getUser_id(), userEvent.getContest_id());
 
             compositeDisposable.add(
                     RequestGenerator.makeApiCall(
                         mainActivity,
                         "Олимпиада добавлена",
-                        "Ошибка",
                         userEventApi.createUserEvent(userEvent),
-                        response -> {
-                            dismiss();
-                        })
+                        response1 -> {
+                            RequestGenerator.makeApiCall(
+                                mainActivity,
+                                achievementApi.createAchievement(achievement),
+                                response2 -> {
+                                    dismiss();
+                                } // TODO: УЛУЧШИТЬ ЧИТАЕМОСТЬ!!!! убрать вложенность
+                        );})
             );
 
 

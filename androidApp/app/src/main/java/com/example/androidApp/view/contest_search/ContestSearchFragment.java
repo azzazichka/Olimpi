@@ -1,7 +1,6 @@
 package com.example.androidApp.view.contest_search;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import com.example.androidApp.presenter.server.requests.ContestRequests;
 import com.example.androidApp.presenter.server.service.UserEventApi;
 import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
 import com.example.androidApp.view.contest_search.contest_list.ContestInfoDialogFragment;
-import com.example.androidApp.view.contest_search.contest_list.RecyclerViewInterface;
+import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidapp.R;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setAdapter(adapter);
-
+        recyclerView.setItemAnimator(null);
         contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
 
@@ -56,6 +55,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
         subjects.add("физика");
 
         ContestRequests.getInstance().updateContestsListBySubjects(subjects);
+
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             ContestRequests.getInstance().updateContestsListBySubjects(subjects);
@@ -73,8 +73,6 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
         compositeDisposable.add(
             RequestGenerator.makeApiCall(
                 mainActivity,
-                null,
-                "Ошибка",
                 userEventApi.getUserEvents(),
                 userEvents -> {
                     Long userEventId = -1L;
