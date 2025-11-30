@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidApp.MainActivity;
@@ -45,6 +46,8 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
         RecyclerView recyclerView = view.findViewById(R.id.achievements_list);
 
         adapter = new ContestAdapter(view.getContext(), this);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
         recyclerView.setAdapter(adapter);
         adapter.updateList(new ArrayList<>());
 
@@ -62,7 +65,6 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
                         })
         );
 
-        
     }
 
     @Override

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/contest_title"
+
+        tools:text="олимпиада имени келдыша"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/contest_info"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contest_title"/>
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/contest_info"
+        app:layout_constraintBottom_toBottomOf="parent
+">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/date_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Установить дату"
+                android:textColor="#999999" />
+            <ImageButton
+                android:id="@+id/btn_clear_date"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/notification_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Установить уведомление"
+                android:textColor="#999999" />
+            <ImageButton
+                android:id="@+id/btn_clear_notification"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attachments_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+      />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

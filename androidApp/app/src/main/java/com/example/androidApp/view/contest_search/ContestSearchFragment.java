@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidApp.MainActivity;
@@ -46,6 +48,8 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
         ContestRequests.getInstance().clearContestData();
         contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);

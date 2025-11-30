@@ -58,8 +58,8 @@ public class ContestAddDialogFragment extends DialogFragment {
     Contest contest;
     UserEvent userEvent = new UserEvent();
     Calendar date = Calendar.getInstance();
+    TextView date_picker, notification_picker;
     ImageButton clear_date, clear_notification;
-    TextView date_text_view, notification_text_view;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -87,12 +87,10 @@ public class ContestAddDialogFragment extends DialogFragment {
         ImageButton add_btn = view.findViewById(R.id.btn_add_dialog);
 
         clear_date = view.findViewById(R.id.btn_clear_date);
-        date_text_view = view.findViewById(R.id.date_text_view);
-        TextView date_picker = view.findViewById(R.id.date_picker);
+        date_picker = view.findViewById(R.id.date_picker);
 
         clear_notification = view.findViewById(R.id.btn_clear_notification);
-        notification_text_view = view.findViewById(R.id.notification_text_view);
-        TextView notification_picker = view.findViewById(R.id.notification_picker);
+        notification_picker = view.findViewById(R.id.notification_picker);
 
         if (contest != null) {
             contest_title.setText(contest.getTitle());
@@ -101,18 +99,16 @@ public class ContestAddDialogFragment extends DialogFragment {
         }
 
         clear_date.setOnClickListener(v -> {
-            date_text_view.setText("");
             clear_date.setVisibility(GONE);
-            date_text_view.setVisibility(GONE);
             userEvent.setStart_time(null);
             userEvent.setEnd_time(null);
+            date_picker.setText("Установить дату");
         });
 
         clear_notification.setOnClickListener(v -> {
-            notification_text_view.setText("");
             clear_notification.setVisibility(GONE);
-            notification_text_view.setVisibility(GONE);
             userEvent.setNotification_time(null);
+            notification_picker.setText("Установить уведомление");
         });
 
         date_picker.setOnClickListener(v -> showDatePickers());
@@ -123,7 +119,6 @@ public class ContestAddDialogFragment extends DialogFragment {
         add_btn.setOnClickListener(v -> {
             UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
             AchievementApi achievementApi = ServiceGenerator.createService(AchievementApi.class);
-            MainActivity mainActivity = (MainActivity) getActivity();
             Achievement achievement = new Achievement(userEvent.getUser_id(), userEvent.getContest_id());
 
             compositeDisposable.add(
@@ -154,11 +149,10 @@ public class ContestAddDialogFragment extends DialogFragment {
             date.set(Calendar.MINUTE, minute);
             userEvent.setEnd_time(date.getTime());
 
-            date_text_view.setVisibility(VISIBLE);
             String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
                     '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
                     "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
-            date_text_view.setText(text);
+            date_picker.setText(text);
             clear_date.setVisibility(VISIBLE);
             view.setVisibility(GONE);
         };
@@ -217,11 +211,9 @@ public class ContestAddDialogFragment extends DialogFragment {
                     date.set(Calendar.MINUTE, minute);
                     userEvent.setNotification_time(date.getTime());
 
-                    notification_text_view.setVisibility(VISIBLE);
-
                     String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
                             " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
-                    notification_text_view.setText(text);
+                    notification_picker.setText(text);
                     clear_notification.setVisibility(VISIBLE);
                     view.setVisibility(GONE);
                 };
