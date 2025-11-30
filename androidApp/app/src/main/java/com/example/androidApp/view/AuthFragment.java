@@ -2,21 +2,15 @@ package com.example.androidApp.view;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.example.androidApp.MainActivity;
@@ -28,16 +22,7 @@ import com.example.androidApp.presenter.server.service.UserApi;
 import com.example.androidApp.presenter.server.service.UserKeyApi;
 import com.example.androidapp.R;
 
-import java.io.IOException;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
 
 
 public class AuthFragment extends Fragment {
@@ -75,7 +60,7 @@ public class AuthFragment extends Fragment {
             UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
 
             compositeDisposable.add(
-                    RequestGenerator.getInstance().getDisposable(
+                    RequestGenerator.getInstance().makeApiCall(
                             "Вход успешен",
                             "Неправильная почта/пароль",
                             userKeyApi.getUserKey(email, password),
@@ -93,7 +78,7 @@ public class AuthFragment extends Fragment {
             User user = new User(null, "", email, password, 0);
 
             compositeDisposable.add(
-                    RequestGenerator.getInstance().getDisposable(
+                    RequestGenerator.getInstance().makeApiCall(
                             "Регистрация успешна",
                             "Ошибка",
                             userApi.registerUser(user),

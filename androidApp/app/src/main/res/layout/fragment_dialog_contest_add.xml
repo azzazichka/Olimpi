@@ -16,6 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:minWidth="250dp"
             android:background="#00000000"
             android:padding="15dp">
             <TextView
@@ -60,18 +61,7 @@
                 android:layout_marginRight="100dp"
                 app:layout_constraintHorizontal_bias="0"
                 />
-            <TextView
-                android:id="@+id/date_text_view"
-                android:layout_width="wrap_content"
-                android:maxWidth="250dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:text="2025.12.20 20:00-10:00"
-                app:layout_constraintTop_toBottomOf="@id/date_picker"
-                app:layout_constraintLeft_toLeftOf="@id/date_picker"
-                android:layout_marginTop="5dp"
-                />
+
             <ImageButton
                 android:id="@+id/btn_clear_date"
                 android:layout_width="35dp"
@@ -79,10 +69,11 @@
                 android:background="@android:drawable/ic_menu_close_clear_cancel"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:layout_constraintLeft_toRightOf="@id/date_text_view"
-                app:layout_constraintTop_toTopOf="@id/date_text_view"
+                app:layout_constraintLeft_toRightOf="@id/date_picker"
+                app:layout_constraintTop_toTopOf="@id/date_picker"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintHorizontal_bias="0.1"
                 />
 
 
@@ -93,24 +84,13 @@
                 android:layout_marginTop="40dp"
                 android:text="Установить уведомление"
                 android:textColor="#999999"
-                app:layout_constraintTop_toBottomOf="@id/date_text_view"
+                app:layout_constraintTop_toBottomOf="@id/date_picker"
                 app:layout_constraintStart_toStartOf="@id/date_picker"
                 app:layout_constraintEnd_toStartOf="@id/btn_add_dialog"
                 app:layout_constraintHorizontal_bias="0"
                 android:layout_marginEnd="30dp"
                 />
-            <TextView
-                android:id="@+id/notification_text_view"
-                android:layout_width="wrap_content"
-                android:maxWidth="250dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:text="2025.12.20 20:00"
-                app:layout_constraintTop_toBottomOf="@id/notification_picker"
-                app:layout_constraintStart_toStartOf="@id/notification_picker"
-                android:layout_marginTop="5dp"
-                />
+
             <ImageButton
                 android:id="@+id/btn_clear_notification"
                 android:layout_width="35dp"
@@ -118,10 +98,11 @@
                 android:background="@android:drawable/ic_menu_close_clear_cancel"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:layout_constraintHorizontal_bias="0.3"
-                app:layout_constraintLeft_toRightOf="@id/notification_text_view"
-                app:layout_constraintTop_toTopOf="@id/notification_text_view"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintLeft_toRightOf="@id/notification_picker"
+                app:layout_constraintTop_toTopOf="@id/notification_picker"
                 app:layout_constraintRight_toLeftOf="@id/btn_add_dialog"
+                app:layout_constraintHorizontal_bias="0.1"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

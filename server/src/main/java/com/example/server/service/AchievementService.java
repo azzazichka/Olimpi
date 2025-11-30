@@ -19,7 +19,7 @@ public class AchievementService {
     private final AttachmentService attachmentService;
 
     public AchievementService(
-            AchievementRepository achievementRepository, 
+            AchievementRepository achievementRepository,
             AttachmentService attachmentService
     ) {
         this.achievementRepository = achievementRepository;
@@ -41,8 +41,11 @@ public class AchievementService {
 
     public void deleteAchievementById(Long id) throws IOException {
         File file = new File(getPath2Attachments(id));
-        for (File img : Objects.requireNonNull(file.listFiles())) {
-            attachmentService.deleteAttachment(Long.valueOf(img.getName()));
+        File[] images = file.listFiles();
+        if (images != null) {
+            for (File img : images) {
+                attachmentService.deleteAttachment(Long.valueOf(img.getName()));
+            }
         }
         boolean deleted = file.delete();
         if (!deleted) {

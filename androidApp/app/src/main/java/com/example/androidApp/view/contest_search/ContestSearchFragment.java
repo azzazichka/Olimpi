@@ -8,9 +8,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
@@ -46,6 +46,8 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
         ContestRequests.getInstance().clearContestData();
         contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
@@ -67,11 +69,9 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
     public void onItemClick(int position) {
         Contest clickedContest = adapter.getContests().get(position);
 
-        MainActivity mainActivity = (MainActivity) requireActivity();
-
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         compositeDisposable.add(
-            RequestGenerator.getInstance().getDisposable(
+            RequestGenerator.getInstance().makeApiCall(
                     userEventApi.getUserEvents(),
                     userEvents -> {
                         Long userEventId = -1L;

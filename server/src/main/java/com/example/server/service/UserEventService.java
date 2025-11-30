@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.repository.achievement.Achievement;
 import com.example.server.repository.user_event.UserEvent;
 import com.example.server.repository.user_event.UserEventRepository;
 import org.springframework.stereotype.Service;
@@ -43,10 +44,14 @@ public class UserEventService {
         }
         UserEvent event = getEvent(changes.getId());
         if (changes.getTitle() != null) event.setTitle(changes.getTitle());
-        if (changes.getStart_time() != null) event.setStart_time(changes.getStart_time());
-        if (changes.getEnd_time() != null) event.setEnd_time(changes.getEnd_time());
-        if (changes.getNotification_time() != null) event.setNotification_time(changes.getNotification_time());
+        event.setStart_time(changes.getStart_time());
+        event.setEnd_time(changes.getEnd_time());
+        event.setNotification_time(changes.getNotification_time());
 
         eventRepository.save(event);
+    }
+
+    public UserEvent getUserEvent(Long userId, Long contestId) {
+        return eventRepository.findByUserIdAndContestId(userId, contestId);
     }
 }

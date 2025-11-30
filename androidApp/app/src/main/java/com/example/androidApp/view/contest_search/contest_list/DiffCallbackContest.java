@@ -7,11 +7,11 @@ import com.example.androidApp.model.entity.Contest;
 import java.util.List;
 import java.util.Objects;
 
-public class DiffCallback extends DiffUtil.Callback {
+public class DiffCallbackContest extends DiffUtil.Callback {
     private final List<Contest> oldList;
     private final List<Contest> newList;
 
-    public DiffCallback(List<Contest> oldList, List<Contest> newList) {
+    public DiffCallbackContest(List<Contest> oldList, List<Contest> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }
