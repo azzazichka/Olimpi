@@ -7,12 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.androidApp.MainActivity;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
@@ -73,7 +71,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         compositeDisposable.add(
-            RequestGenerator.getInstance().getDisposable(
+            RequestGenerator.getInstance().makeApiCall(
                     userEventApi.getUserEvents(),
                     userEvents -> {
                         Long userEventId = -1L;

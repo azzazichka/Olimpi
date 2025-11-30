@@ -84,7 +84,7 @@ public class ContestInfoDialogFragment extends DialogFragment {
 
             delete_btn.setOnClickListener(v -> {
                 compositeDisposable.add(
-                        RequestGenerator.getInstance().getDisposable(
+                        RequestGenerator.getInstance().makeApiCall(
                                 "Событие удалено успешно",
                                 "Ошибка",
                                 userEventApi.deleteUserEvent(userEventId)

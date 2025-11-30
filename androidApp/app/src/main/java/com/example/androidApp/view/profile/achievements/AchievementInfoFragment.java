@@ -1,7 +1,11 @@
 package com.example.androidApp.view.profile.achievements;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static com.example.androidApp.model.entity.UserEvent.setUserEventDate;
+import static com.example.androidApp.model.entity.UserEvent.setUserEventNotification;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidApp.model.entity.Achievement;
+import com.example.androidApp.model.DateConverter;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
@@ -64,6 +68,42 @@ public class AchievementInfoFragment extends Fragment {
         backButton.setOnClickListener(v -> closeFragment());
         deleteAchievementButton.setOnClickListener(v -> deleteAchievement());
 
+
+        if (userEvent.getStart_time() != null) {
+            String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
+                    '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
+                    "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
+            datePicker.setText(text);
+            clearDate.setVisibility(VISIBLE);
+        }
+        if (userEvent.getNotification_time() != null) {
+            String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
+                    " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
+            notificationPicker.setText(text);
+            clearNotification.setVisibility(VISIBLE);
+        }
+
+
+
+        datePicker.setOnClickListener(v -> {
+            setUserEventDate(userEvent, requireContext(), datePicker, clearDate);
+        });
+        notificationPicker.setOnClickListener(v -> {
+            setUserEventNotification(userEvent, requireContext(), notificationPicker, clearNotification);
+        });
+        clearDate.setOnClickListener(v -> {
+            clearDate.setVisibility(GONE);
+            userEvent.setStart_time(null);
+            userEvent.setEnd_time(null);
+            datePicker.setText("Установить дату");
+        });
+
+        clearNotification.setOnClickListener(v -> {
+            clearNotification.setVisibility(GONE);
+                userEvent.setNotification_time(null);
+            notificationPicker.setText("Установить уведомление");
+        });
+
     }
 
     private void closeFragment() {
@@ -76,7 +116,7 @@ public class AchievementInfoFragment extends Fragment {
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
 
         compositeDisposable.add(
-                RequestGenerator.getInstance().getDisposable(
+                RequestGenerator.getInstance().makeApiCall(
                         "Удалено",
                         userEventApi.deleteUserEvent(userEvent.getId()).
                                 flatMap(r -> achievementApi.deleteAchievement(contest.getId())
@@ -89,5 +129,11 @@ public class AchievementInfoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         compositeDisposable.dispose();
+
+        UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
+        RequestGenerator.getInstance().makeApiCall(
+                userEventApi.updateUserEvent(userEvent),
+                r -> {}
+        );
     }
 }

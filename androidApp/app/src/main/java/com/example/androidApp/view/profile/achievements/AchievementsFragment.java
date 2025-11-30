@@ -1,9 +1,7 @@
 package com.example.androidApp.view.profile.achievements;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,27 +11,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.androidApp.MainActivity;
 import com.example.androidApp.RecyclerViewInterface;
-import com.example.androidApp.model.entity.Achievement;
 import com.example.androidApp.model.entity.Contest;
-import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.presenter.server.requests.ContestRequests;
 import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidApp.presenter.server.service.AchievementApi;
-import com.example.androidApp.presenter.server.service.ContestApi;
 import com.example.androidApp.presenter.server.service.UserEventApi;
-import com.example.androidApp.view.AuthFragment;
 import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
 import com.example.androidapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -44,12 +35,11 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
 
     private ContestAdapter adapter;
     private LiveData<List<Contest>> contestsData;
-    private CompositeDisposable compositeDisposable;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        compositeDisposable = new CompositeDisposable();
         RecyclerView recyclerView = view.findViewById(R.id.achievements_list);
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -64,7 +54,7 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
 
         compositeDisposable.add(
-                RequestGenerator.getInstance().getDisposable(
+                RequestGenerator.getInstance().makeApiCall(
                         achievementApi.getAchievements(),
                         achievements -> {
                             ContestRequests.getInstance().updateContestsListByAchievements(achievements);
@@ -77,11 +67,10 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
     @Override
     public void onItemClick(int position) {
         Contest clickedContest = adapter.getContests().get(position);
-        Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
 
         compositeDisposable.add(
-                RequestGenerator.getInstance().getDisposable(
+                RequestGenerator.getInstance().makeApiCall(
                         userEventApi.getUserEvent(UserAuth.getInstance().getUser().getId(), clickedContest.getId()),
                         userEvent -> {
                             FragmentManager fragmentManager = getParentFragmentManager();
@@ -96,8 +85,8 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         compositeDisposable.dispose();
     }
 }

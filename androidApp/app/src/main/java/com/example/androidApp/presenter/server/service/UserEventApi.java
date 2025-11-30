@@ -12,6 +12,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface UserEventApi {
@@ -26,4 +27,7 @@ public interface UserEventApi {
 
     @GET("/api/user_events")
     Single<UserEvent> getUserEvent(@Query("userId") Long userId, @Query("contestId") Long contestId);
+
+    @PUT("/api/user_events")
+    Single<ResponseBody> updateUserEvent(@Body UserEvent changes);
 }

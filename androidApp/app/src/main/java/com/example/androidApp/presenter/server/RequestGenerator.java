@@ -9,8 +9,6 @@ import com.example.androidApp.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -34,28 +32,28 @@ public class RequestGenerator {
         this.mainActivity = mainActivity;
     }
 
-    public <T> Disposable getDisposable(
+    public <T> Disposable makeApiCall(
             Single<T> apiCall,
             Consumer<T> onSuccessCallback) {
-        return getDisposable(
+        return makeApiCall(
                 null,
                 "Ошибка",
                 apiCall,
                 onSuccessCallback);
     }
 
-    public <T> Disposable getDisposable(
+    public <T> Disposable makeApiCall(
             @NotNull String onSuccessMessage,
             Single<T> apiCall,
             Consumer<T> onSuccessCallback) {
-        return getDisposable(
+        return makeApiCall(
                 onSuccessMessage,
                 "Ошибка",
                 apiCall,
                 onSuccessCallback);
     }
 
-    public <T> Disposable getDisposable(
+    public <T> Disposable makeApiCall(
             @Nullable String onSuccessMessage,
             @Nullable String onErrorMessage,
             Single<T> apiCall,
