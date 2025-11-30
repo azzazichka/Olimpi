@@ -99,10 +99,21 @@ public class ContestAddDialogFragment extends DialogFragment {
         });
 
         date_picker.setOnClickListener(v -> {
-            setUserEventDate(userEvent, requireContext(), date_picker, clear_date);
+            setUserEventDate(userEvent, requireContext(), () -> {
+                String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
+                        '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
+                        "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
+                date_picker.setText(text);
+                clear_date.setVisibility(VISIBLE);
+            });
         });
         notification_picker.setOnClickListener(v -> {
-            setUserEventNotification(userEvent, requireContext(), notification_picker, clear_notification);
+            setUserEventNotification(userEvent, requireContext(), () -> {
+                String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
+                        " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
+                notification_picker.setText(text);
+                clear_notification.setVisibility(VISIBLE);
+            });
         });
 
 

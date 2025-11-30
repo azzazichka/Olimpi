@@ -14,6 +14,9 @@ import com.example.androidApp.model.DateConverter;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class UserEvent {
     private Long id;
@@ -113,7 +116,7 @@ public class UserEvent {
 
 
 
-    public static void setUserEventDate(UserEvent userEvent, Context context, TextView date_picker, ImageButton clear_date) {
+    public static void setUserEventDate(UserEvent userEvent, Context context, Runnable runnable) {
         Calendar currentCalendar = Calendar.getInstance();
         Calendar date = Calendar.getInstance();
 
@@ -123,11 +126,7 @@ public class UserEvent {
                     date.set(Calendar.MINUTE, minute);
                     userEvent.setEnd_time(date.getTime());
 
-                    String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
-                            '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
-                            "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
-                    date_picker.setText(text);
-                    clear_date.setVisibility(VISIBLE);
+                    runnable.run();
 
                     view.setVisibility(GONE);
                 };
@@ -177,7 +176,7 @@ public class UserEvent {
         datePickerDialog.show();
     }
 
-    public static void setUserEventNotification(UserEvent userEvent, Context context, TextView notification_picker, ImageButton clear_notification) {
+    public static void setUserEventNotification(UserEvent userEvent, Context context, Runnable runnable) {
         Calendar currentCalendar = Calendar.getInstance();
         Calendar date = Calendar.getInstance();
         TimePickerDialog.OnTimeSetListener listenerTime =
@@ -186,11 +185,7 @@ public class UserEvent {
                     date.set(Calendar.MINUTE, minute);
                     userEvent.setNotification_time(date.getTime());
 
-
-                    String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
-                            " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
-                    notification_picker.setText(text);
-                    clear_notification.setVisibility(VISIBLE);
+                    runnable.run();
                     view.setVisibility(GONE);
                 };
 

@@ -49,6 +49,9 @@ public class AchievementInfoFragment extends Fragment {
         return binding.getRoot();
     }
 
+    TextView datePicker, notificationPicker;
+    ImageButton clearDate, clearNotification;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -58,10 +61,10 @@ public class AchievementInfoFragment extends Fragment {
         TextView contestInfo = binding.contestInfo;
         ImageButton backButton = binding.btnBack;
         ImageButton deleteAchievementButton = binding.deleteAchievement;
-        TextView datePicker = binding.datePicker;
-        TextView notificationPicker = binding.notificationPicker;
-        ImageButton clearDate = binding.btnClearDate;
-        ImageButton clearNotification = binding.btnClearNotification;
+        datePicker = binding.datePicker;
+        notificationPicker = binding.notificationPicker;
+        clearDate = binding.btnClearDate;
+        clearNotification = binding.btnClearNotification;
 
         contestTitle.setText(contest.getTitle());
         contestInfo.setText(contest.toString());
@@ -69,41 +72,61 @@ public class AchievementInfoFragment extends Fragment {
         deleteAchievementButton.setOnClickListener(v -> deleteAchievement());
 
 
-        if (userEvent.getStart_time() != null) {
-            String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
-                    '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
-                    "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
-            datePicker.setText(text);
-            clearDate.setVisibility(VISIBLE);
-        }
-        if (userEvent.getNotification_time() != null) {
-            String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
-                    " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
-            notificationPicker.setText(text);
-            clearNotification.setVisibility(VISIBLE);
-        }
-
+        updateDatePickerText();
+        updateNotificationPickerText();
 
 
         datePicker.setOnClickListener(v -> {
-            setUserEventDate(userEvent, requireContext(), datePicker, clearDate);
+            setUserEventDate(userEvent, requireContext(), () -> {
+                updateDatePickerText();
+                saveChanges();
+            });
+
         });
         notificationPicker.setOnClickListener(v -> {
-            setUserEventNotification(userEvent, requireContext(), notificationPicker, clearNotification);
+            setUserEventNotification(userEvent, requireContext(), () -> {
+                updateNotificationPickerText();
+                saveChanges();
+            });
         });
         clearDate.setOnClickListener(v -> {
-            clearDate.setVisibility(GONE);
             userEvent.setStart_time(null);
             userEvent.setEnd_time(null);
-            datePicker.setText("Установить дату");
+            saveChanges();
+            updateDatePickerText();
         });
 
         clearNotification.setOnClickListener(v -> {
-            clearNotification.setVisibility(GONE);
-                userEvent.setNotification_time(null);
-            notificationPicker.setText("Установить уведомление");
+            userEvent.setNotification_time(null);
+            saveChanges();
+            updateNotificationPickerText();
         });
 
+    }
+
+    private void updateNotificationPickerText() {
+        if (userEvent.getNotification_time() == null) {
+            clearNotification.setVisibility(GONE);
+            notificationPicker.setText("Установить уведомление");
+            return;
+        }
+        String text = DateConverter.date2String(userEvent.getNotification_time(), "dd.MM.yy") +
+                " " + DateConverter.date2String(userEvent.getNotification_time(), "HH:mm");
+        notificationPicker.setText(text);
+        clearNotification.setVisibility(VISIBLE);
+    }
+
+    private void updateDatePickerText() {
+        if (userEvent.getStart_time() == null) {
+            clearDate.setVisibility(GONE);
+            datePicker.setText("Установить дату");
+            return;
+        }
+        String text = DateConverter.date2String(userEvent.getStart_time(), "dd.MM.yy") +
+                '\n' + DateConverter.date2String(userEvent.getStart_time(), "HH:mm") +
+                "-" + DateConverter.date2String(userEvent.getEnd_time(), "HH:mm");
+        datePicker.setText(text);
+        clearDate.setVisibility(VISIBLE);
     }
 
     private void closeFragment() {
@@ -125,15 +148,17 @@ public class AchievementInfoFragment extends Fragment {
         );
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
-
+    private void saveChanges() {
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         RequestGenerator.getInstance().makeApiCall(
                 userEventApi.updateUserEvent(userEvent),
                 r -> {}
         );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 }
