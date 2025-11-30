@@ -71,8 +71,6 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
     public void onItemClick(int position) {
         Contest clickedContest = adapter.getContests().get(position);
 
-        MainActivity mainActivity = (MainActivity) requireActivity();
-
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         compositeDisposable.add(
             RequestGenerator.getInstance().getDisposable(

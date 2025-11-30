@@ -1,5 +1,6 @@
 package com.example.androidApp.presenter.server.service;
 
+import com.example.androidApp.model.entity.Achievement;
 import com.example.androidApp.model.entity.UserEvent;
 
 import java.util.List;
@@ -17,9 +18,12 @@ public interface UserEventApi {
     @POST("/api/user_events")
     Single<ResponseBody> createUserEvent(@Body UserEvent userEvent);
 
-    @GET("/api/user_events")
+    @GET("/api/user_events/all")
     Single<List<UserEvent>> getUserEvents();
 
     @DELETE("/api/user_events")
     Single<ResponseBody> deleteUserEvent(@Query("id") Long userEventId);
+
+    @GET("/api/user_events")
+    Single<UserEvent> getUserEvent(@Query("userId") Long userId, @Query("contestId") Long contestId);
 }

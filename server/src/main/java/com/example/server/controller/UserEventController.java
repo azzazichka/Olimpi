@@ -1,5 +1,6 @@
 package com.example.server.controller;
 
+import com.example.server.repository.achievement.Achievement;
 import com.example.server.repository.user_event.UserEvent;
 import com.example.server.service.UserEventService;
 import com.example.server.service.UserKeyService;
@@ -21,8 +22,12 @@ public class UserEventController {
         this.userKeyService = userKeyService;
     }
 
-
     @GetMapping
+    public UserEvent getUserEvent(@RequestParam Long userId, @RequestParam Long contestId) {
+        return userEventService.getUserEvent(userId, contestId);
+    }
+
+    @GetMapping("/all")
     public List<UserEvent> getUserEvents(@RequestHeader("x-api-key") String key) {
         Long user_id = userKeyService.getUserIdByKey(key);
 

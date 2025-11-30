@@ -64,6 +64,7 @@ public class RequestGenerator {
         return apiCall
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnDispose(() -> mainActivity.hideLoad())
                 .subscribeWith(new DisposableSingleObserver<T>() {
                     @Override
                     protected void onStart() {

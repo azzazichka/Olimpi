@@ -3,24 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="10dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/contest_title"
-
+        android:textColor="#555555"
         tools:text="олимпиада имени келдыша"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_back"
+        android:layout_marginHorizontal="40dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/contest_info"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contest_title"/>
+        app:layout_constraintTop_toBottomOf="@id/contest_title"
+        android:textColor="#555555" />
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -30,13 +34,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <ImageButton
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/delete_achievement"
+        android:layout_marginStart="5dp"
+        android:background="@android:drawable/ic_menu_delete"
+        app:layout_constraintStart_toEndOf="@id/contest_title"
+        app:layout_constraintEnd_toStartOf="@id/btn_back"
+        app:layout_constraintHorizontal_bias="0.1"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/contest_info"
-        app:layout_constraintBottom_toBottomOf="parent
-">
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Установить дату"
-                android:textColor="#999999" />
+                android:textColor="#555555" />
             <ImageButton
                 android:id="@+id/btn_clear_date"
                 android:layout_width="35dp"
@@ -67,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Установить уведомление"
-                android:textColor="#999999" />
+                android:textColor="#555555" />
             <ImageButton
                 android:id="@+id/btn_clear_notification"
                 android:layout_width="35dp"

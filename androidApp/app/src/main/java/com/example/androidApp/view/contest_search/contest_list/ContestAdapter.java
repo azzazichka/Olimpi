@@ -56,7 +56,12 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
         String date = dateStartStr + "-" + dateEndStr;
         String lvl = contest.getLvl() != null ? contest.getLvl() + "ур" : null;
 
-        holder.titleView.setText(contest.getTitle());
+        String titleText = contest.getTitle();
+        if (titleText.length() > 80) {
+            titleText = titleText.substring(0, 60);
+            titleText += "...";
+        }
+        holder.titleView.setText(titleText);
 
         if (lvl != null) {
             holder.lvlView.setText(lvl);
@@ -100,7 +105,7 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
     }
 
     public void updateList(List<Contest> newContestsList) {
-        DiffCallback diffCallback = new DiffCallback(this.contests, newContestsList);
+        DiffCallbackContest diffCallback = new DiffCallbackContest(this.contests, newContestsList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
         this.contests.clear();
