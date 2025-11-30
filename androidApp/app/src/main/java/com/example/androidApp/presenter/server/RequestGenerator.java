@@ -9,6 +9,8 @@ import com.example.androidApp.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -18,33 +20,42 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RequestGenerator {
-    public static <T> Disposable makeApiCall(
-        MainActivity mainActivity,
-        Single<T> apiCall,
-        Consumer<T> onSuccessCallback) {
-        return makeApiCall(
-                mainActivity,
+    private static RequestGenerator instance;
+    MainActivity mainActivity;
+
+    public static RequestGenerator getInstance() {
+        if (instance == null) {
+            instance = new RequestGenerator();
+        }
+        return instance;
+    }
+
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
+    public <T> Disposable getDisposable(
+            Single<T> apiCall,
+            Consumer<T> onSuccessCallback) {
+        return getDisposable(
                 null,
                 "Ошибка",
                 apiCall,
                 onSuccessCallback);
     }
 
-    public static <T> Disposable makeApiCall(
-        MainActivity mainActivity,
-        @NotNull String onSuccessMessage,
-        Single<T> apiCall,
-        Consumer<T> onSuccessCallback) {
-        return makeApiCall(
-                mainActivity,
+    public <T> Disposable getDisposable(
+            @NotNull String onSuccessMessage,
+            Single<T> apiCall,
+            Consumer<T> onSuccessCallback) {
+        return getDisposable(
                 onSuccessMessage,
                 "Ошибка",
                 apiCall,
                 onSuccessCallback);
     }
 
-    public static <T> Disposable makeApiCall(
-            MainActivity mainActivity,
+    public <T> Disposable getDisposable(
             @Nullable String onSuccessMessage,
             @Nullable String onErrorMessage,
             Single<T> apiCall,
@@ -78,7 +89,6 @@ public class RequestGenerator {
                             Toast.makeText(mainActivity.getApplicationContext(), onErrorMessage, Toast.LENGTH_LONG).show();
                         mainActivity.hideLoad();
                         Log.e("AZZA", e.toString());
-
                     }
                 });
     }

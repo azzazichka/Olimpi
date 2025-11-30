@@ -127,18 +127,11 @@ public class ContestAddDialogFragment extends DialogFragment {
             Achievement achievement = new Achievement(userEvent.getUser_id(), userEvent.getContest_id());
 
             compositeDisposable.add(
-                    RequestGenerator.makeApiCall(
-                        mainActivity,
-                        "Олимпиада добавлена",
-                        userEventApi.createUserEvent(userEvent),
-                        response1 -> {
-                            RequestGenerator.makeApiCall(
-                                mainActivity,
-                                achievementApi.createAchievement(achievement),
-                                response2 -> {
-                                    dismiss();
-                                } // TODO: УЛУЧШИТЬ ЧИТАЕМОСТЬ!!!! убрать вложенность
-                        );})
+                    RequestGenerator.getInstance().getDisposable(
+                            "Олимпиада добавлена",
+                            userEventApi.createUserEvent(userEvent)
+                                    .flatMap(r -> achievementApi.createAchievement(achievement)),
+                            r -> dismiss())
             );
 
 

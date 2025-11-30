@@ -84,20 +84,12 @@ public class ContestInfoDialogFragment extends DialogFragment {
 
             delete_btn.setOnClickListener(v -> {
                 compositeDisposable.add(
-                        RequestGenerator.makeApiCall(
-                                mainActivity,
+                        RequestGenerator.getInstance().getDisposable(
                                 "Событие удалено успешно",
                                 "Ошибка",
-                                userEventApi.deleteUserEvent(userEventId),
-                                response -> {
-                                    RequestGenerator.makeApiCall(
-                                            mainActivity,
-                                            achievementApi.deleteAchievement(contest.getId()),
-                                            response2 -> {
-                                                dismiss();
-                                            }
-                                    );
-                                }
+                                userEventApi.deleteUserEvent(userEventId)
+                                        .flatMap(r -> achievementApi.deleteAchievement(contest.getId())),
+                                r -> dismiss()
                         )
                 );
             });

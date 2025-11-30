@@ -18,6 +18,7 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
+import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.requests.UserAuth;
 import com.example.androidApp.view.AuthFragment;
 import com.example.androidApp.view.contest_search.ContestSearchFragment;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         super.onCreate(savedInstanceState);
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        RequestGenerator.getInstance().setMainActivity(this);
 
         loading_progress_bar = findViewById(R.id.loading);
 

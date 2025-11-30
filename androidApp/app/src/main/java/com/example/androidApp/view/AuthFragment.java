@@ -75,34 +75,31 @@ public class AuthFragment extends Fragment {
             UserKeyApi userKeyApi = ServiceGenerator.createService(UserKeyApi.class);
 
             compositeDisposable.add(
-                    RequestGenerator.makeApiCall(
-                        mainActivity,
-                        "Вход успешен",
-                        "Неправильная почта/пароль",
-                        userKeyApi.getUserKey(email, password),
-                        key -> {
+                    RequestGenerator.getInstance().getDisposable(
+                            "Вход успешен",
+                            "Неправильная почта/пароль",
+                            userKeyApi.getUserKey(email, password),
+                            key -> {
 
-                            editor.putString("api_key", key);
-                            editor.apply();
+                                editor.putString("api_key", key);
+                                editor.apply();
 
-                            assert key != null;
-                            UserAuth.getInstance().userAuth(key);
-                        })
+                                assert key != null;
+                                UserAuth.getInstance().userAuth(key);
+                            })
             );
         } else {
             UserApi userApi = ServiceGenerator.createService(UserApi.class);
             User user = new User(null, "", email, password, 0);
 
             compositeDisposable.add(
-                    RequestGenerator.makeApiCall(
-                        mainActivity,
-                        "Регистрация успешна",
+                    RequestGenerator.getInstance().getDisposable(
+                            "Регистрация успешна",
                             "Ошибка",
                             userApi.registerUser(user),
                             response -> {
-                            mode_switch.setChecked(false);
-
-                        })
+                                mode_switch.setChecked(false);
+                            })
             );
         }
     }

@@ -50,12 +50,12 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
 
         AchievementApi achievementApi = ServiceGenerator.createService(AchievementApi.class);
 
+        ContestRequests.getInstance().clearContestData();
         contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
-        Log.i("AZZA", "ACHIEVEMENTS FRAGMENT CREATED");
+
         compositeDisposable.add(
-                RequestGenerator.makeApiCall(
-                        (MainActivity) requireActivity(),
+                RequestGenerator.getInstance().getDisposable(
                         achievementApi.getAchievements(),
                         achievements -> {
                             ContestRequests.getInstance().updateContestsListByAchievements(achievements);

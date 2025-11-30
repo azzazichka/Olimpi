@@ -46,7 +46,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         adapter = new ContestAdapter(view.getContext(), this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(null);
+        ContestRequests.getInstance().clearContestData();
         contestsData = ContestRequests.getInstance().getContestsData();
         contestsData.observe(getViewLifecycleOwner(), adapter::updateList);
 
@@ -71,20 +71,19 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
 
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         compositeDisposable.add(
-            RequestGenerator.makeApiCall(
-                mainActivity,
-                userEventApi.getUserEvents(),
-                userEvents -> {
-                    Long userEventId = -1L;
-                    for (UserEvent userEvent : userEvents) {
-                        if (Objects.equals(userEvent.getContest_id(), clickedContest.getId())) {
-                            userEventId = userEvent.getId();
-                            break;
+            RequestGenerator.getInstance().getDisposable(
+                    userEventApi.getUserEvents(),
+                    userEvents -> {
+                        Long userEventId = -1L;
+                        for (UserEvent userEvent : userEvents) {
+                            if (Objects.equals(userEvent.getContest_id(), clickedContest.getId())) {
+                                userEventId = userEvent.getId();
+                                break;
+                            }
                         }
-                    }
-                    ContestInfoDialogFragment customDialog = ContestInfoDialogFragment.newInstance(clickedContest, userEventId);
-                    customDialog.show(getParentFragmentManager(), "contest dialog");
-                })
+                        ContestInfoDialogFragment customDialog = ContestInfoDialogFragment.newInstance(clickedContest, userEventId);
+                        customDialog.show(getParentFragmentManager(), "contest dialog");
+                    })
         );
     }
 

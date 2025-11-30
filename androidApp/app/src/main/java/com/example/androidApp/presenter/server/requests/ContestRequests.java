@@ -56,6 +56,10 @@ public class ContestRequests {
         getContestsCall.enqueue(updateContestsCallback);
     }
 
+    public void clearContestData() {
+        contestsData.setValue(new ArrayList<>());
+    }
+
     public LiveData<List<Contest>> getContestsData() {
         return contestsData;
     }
