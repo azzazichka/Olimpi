@@ -26,6 +26,11 @@ public class AchievementController {
         return achievementService.getAchievements(user_id);
     }
 
+    @GetMapping("/get_one")
+    public Achievement getAchievement(@RequestParam Long userId, @RequestParam Long contestId) {
+        return achievementService.getAchievement(userId, contestId);
+    }
+
     @PostMapping
         public void createAchievement(
             @RequestBody Achievement achievement,
@@ -43,8 +48,8 @@ public class AchievementController {
         Long userId = userKeyService.getUserIdByKey(key);
 
 
-        Long id = achievementService.getAchievementIdByUserIdAndContestId(userId, contestId);
-        achievementService.deleteAchievementById(id);
+        Long id = achievementService.getAchievement(userId, contestId).getId();
+        achievementService.deleteAchievement(id);
     }
 
 }

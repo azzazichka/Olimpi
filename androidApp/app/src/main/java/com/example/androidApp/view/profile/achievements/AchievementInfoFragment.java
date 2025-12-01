@@ -11,26 +11,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidApp.model.DateConverter;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.presenter.server.service.AchievementApi;
+import com.example.androidApp.presenter.server.service.AttachmentApi;
 import com.example.androidApp.presenter.server.service.UserEventApi;
+import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
+import com.example.androidApp.view.profile.achievements.attachment_list.AttachmentAdapter;
 import com.example.androidapp.R;
 import com.example.androidapp.databinding.FragmentAchievementInfoBinding;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class AchievementInfoFragment extends Fragment {
+public class AchievementInfoFragment extends Fragment implements RecyclerViewInterface {
     public AchievementInfoFragment(Contest contest, UserEvent userEvent) {
         super(R.layout.fragment_achievement_info);
         this.contest = contest;
@@ -38,6 +44,7 @@ public class AchievementInfoFragment extends Fragment {
     }
 
     private final Contest contest;
+    private Long achievementId;
     private final UserEvent userEvent;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FragmentAchievementInfoBinding binding;
@@ -102,6 +109,24 @@ public class AchievementInfoFragment extends Fragment {
             updateNotificationPickerText();
         });
 
+        AttachmentAdapter adapter = new AttachmentAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+
+        AttachmentApi attachmentApi = ServiceGenerator.createService(AttachmentApi.class);
+        AchievementApi achievementApi = ServiceGenerator.createService(AchievementApi.class);
+        compositeDisposable.add(
+                RequestGenerator.getInstance().makeApiCall(
+                        achievementApi.getAchievement(userEvent.getUser_id(), userEvent.getContest_id())
+                                        .flatMap(achievement -> {
+                                            achievementId = achievement.getId();
+                                            return attachmentApi.getAttachments(achievementId);
+                                        }),
+                        attachments -> {
+                            adapter.attachments = attachments;
+                            adapter.notifyDataSetChanged();
+                        }
+                ));
     }
 
     private void updateNotificationPickerText() {
@@ -160,5 +185,11 @@ public class AchievementInfoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         compositeDisposable.dispose();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        Toast.makeText(getContext(), "clicked item " + position, Toast.LENGTH_SHORT).show();
     }
 }

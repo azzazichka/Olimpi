@@ -2,13 +2,11 @@ package com.example.server.service;
 
 import com.example.server.repository.achievement.Achievement;
 import com.example.server.repository.achievement.AchievementRepository;
-import jakarta.security.auth.message.AuthException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.server.service.AttachmentService.getPath2Attachments;
@@ -39,7 +37,7 @@ public class AchievementService {
         }
     }
 
-    public void deleteAchievementById(Long id) throws IOException {
+    public void deleteAchievement(Long id) throws IOException {
         File file = new File(getPath2Attachments(id));
         File[] images = file.listFiles();
         if (images != null) {
@@ -63,7 +61,8 @@ public class AchievementService {
         return optionalAchievement.get();
     }
 
-    public Long getAchievementIdByUserIdAndContestId(Long userId, Long contestId) {
+    public Achievement getAchievement(Long userId, Long contestId) {
         return achievementRepository.findByUserIdAndContestId(userId, contestId);
     }
+
 }

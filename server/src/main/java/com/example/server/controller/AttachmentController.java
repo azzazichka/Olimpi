@@ -26,12 +26,14 @@ public class AttachmentController {
     }
 
     @GetMapping
-    public List<Attachment> getAttachments(@RequestParam Long id, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
-        Achievement achievement = achievementService.getAchievement(id);
+    public List<Attachment> getAttachments(@RequestParam Long achievementId, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
+        Achievement achievement = achievementService.getAchievement(achievementId);
         userKeyService.checkAuthAchievement(achievement, key);
 
-        return attachmentService.getAttachments(id);
+        return attachmentService.getAttachments(achievementId);
     }
+
+
 
     @PostMapping
     public void createAttachment(@RequestBody Attachment attachment, @RequestHeader("x-api-key") String key) throws IOException, AuthException {

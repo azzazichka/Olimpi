@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidApp.model.entity.Contest;
+import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
 import com.example.androidApp.presenter.server.ServiceGenerator;
 import com.example.androidApp.presenter.server.requests.ContestRequests;
@@ -69,7 +70,6 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
     public void onItemClick(int position) {
         Contest clickedContest = adapter.getContests().get(position);
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
-
         compositeDisposable.add(
                 RequestGenerator.getInstance().makeApiCall(
                         userEventApi.getUserEvent(UserAuth.getInstance().getUser().getId(), clickedContest.getId()),

@@ -10,5 +10,5 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
     List<Achievement> findAllByUserId(Long user_id);
 
     @Query(value = "SELECT * FROM achievements WHERE user_id = :userId AND contest_id = :contestId", nativeQuery = true)
-    Long findByUserIdAndContestId(Long userId, Long contestId);
+    Achievement findByUserIdAndContestId(Long userId, Long contestId);
 }

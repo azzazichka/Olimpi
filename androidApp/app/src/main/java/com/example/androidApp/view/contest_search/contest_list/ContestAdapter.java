@@ -90,14 +90,11 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
             lvlView = view.findViewById(R.id.contest_lvl);
             dateView = view.findViewById(R.id.contest_date);
             gradeView = view.findViewById(R.id.contest_grade);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (recyclerViewInterface != null) {
-                        int pos = getBindingAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(pos);
-                        }
+            view.setOnClickListener(v -> {
+                if (recyclerViewInterface != null) {
+                    int pos = getBindingAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onItemClick(pos);
                     }
                 }
             });

@@ -16,6 +16,9 @@ public interface AchievementApi {
     @GET("/api/achievements")
     Single<List<Achievement>> getAchievements();
 
+    @GET("/api/achievements/get_one")
+    Single<Achievement> getAchievement(@Query("userId") Long userId, @Query("contestId") Long contestId);
+
     @POST("/api/achievements")
     Single<ResponseBody> createAchievement(@Body Achievement achievement);
 
