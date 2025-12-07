@@ -67,7 +67,7 @@ public class AchievementsFragment extends Fragment implements RecyclerViewInterf
 
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, int type) {
         Contest clickedContest = adapter.getContests().get(position);
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);
         compositeDisposable.add(

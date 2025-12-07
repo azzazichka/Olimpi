@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +27,9 @@ public class AttachmentService {
         List<Attachment> attachments = attachmentRepository.findAllByAchievementId(achievementId);
 
         for (Attachment attachment : attachments) {
-            attachment.setImageBytes(Files.readAllBytes(Path.of(attachment.getPath())));
+            byte[] imageBytes = Files.readAllBytes(Path.of(attachment.getPath()));
+            String imageBytesBase64 = Base64.getEncoder().encodeToString(imageBytes);
+            attachment.setImageBytesBase64(imageBytesBase64);
         }
 
         return attachments;
@@ -47,19 +50,20 @@ public class AttachmentService {
 
         boolean deleted = img.delete();
         if (!deleted) {
-            throw new IOException("медиа не удалено: " + attachment.toString());
+            throw new IOException("медиа не удалено: " + attachment);
         }
 
         attachmentRepository.deleteById(id);
     }
 
-    public void createAttachment(Attachment attachment) throws IOException {
-        if (attachment.getImageBytes() == null) {
+    public Long createAttachment(Attachment attachment) throws IOException {
+        if (attachment.getImageBytesBase64() == null) {
             throw new IllegalArgumentException("Не получено медиа " + attachment.toString());
         }
-
         attachmentRepository.save(attachment);
-        Files.write(Path.of(attachment.getPath()), attachment.getImageBytes());
+        byte[] imageBytes = Base64.getDecoder().decode(attachment.getImageBytesBase64());
+        Files.write(Path.of(attachment.getPath()), imageBytes);
+        return attachment.getId();
     }
 
     public void updateAttachment(Attachment changes) {
@@ -70,9 +74,6 @@ public class AttachmentService {
         Attachment newAttachment = getAttachmentById(changes.getId());
         if (changes.getTitle() != null) {
             newAttachment.setTitle(changes.getTitle());
-        }
-        if (changes.getImageBytes() != null) {
-            newAttachment.setImageBytes(changes.getImageBytes());
         }
 
         attachmentRepository.save(newAttachment);

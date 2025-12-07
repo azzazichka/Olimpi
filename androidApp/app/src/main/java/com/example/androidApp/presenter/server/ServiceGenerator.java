@@ -25,6 +25,7 @@ public class ServiceGenerator {
 
     private static final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+
     public static <S> S createService(Class<S> serviceClass) {
         return retrofit.create(serviceClass);
     }
@@ -40,6 +41,7 @@ public class ServiceGenerator {
                     .build();
             return chain.proceed(request);
         });
+
 
         builder.client(httpClient.build());
         retrofit = builder.build();

@@ -42,6 +42,7 @@
         android:background="@android:drawable/ic_menu_delete"
         app:layout_constraintStart_toEndOf="@id/contest_title"
         app:layout_constraintEnd_toStartOf="@id/btn_back"
+        app:layout_constraintTop_toTopOf="@id/contest_title"
         app:layout_constraintHorizontal_bias="0.1"
         />
 

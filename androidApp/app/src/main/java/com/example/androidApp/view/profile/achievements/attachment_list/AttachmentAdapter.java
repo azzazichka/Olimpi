@@ -20,6 +20,9 @@ import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidApp.model.DateConverter;
 import com.example.androidApp.model.entity.Attachment;
 import com.example.androidApp.model.entity.Contest;
+import com.example.androidApp.presenter.server.RequestGenerator;
+import com.example.androidApp.presenter.server.ServiceGenerator;
+import com.example.androidApp.presenter.server.service.AttachmentApi;
 import com.example.androidApp.view.contest_search.contest_list.DiffCallbackContest;
 import com.example.androidapp.R;
 
@@ -66,6 +69,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.My
         public ImageView attachmentImage;
         public ImageButton deleteAttachment;
         public ImageView addAttachment;
+        public static final int CLICK = 0;
+        public static final int DELETE = 1;
 
         public MyViewHolder(View view, RecyclerViewInterface recyclerViewInterface) {
             super(view);
@@ -73,18 +78,20 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.My
             deleteAttachment = view.findViewById(R.id.delete_attachment_btn);
             addAttachment = view.findViewById(R.id.add_attachment_btn);
 
-            if (deleteAttachment != null) {
+            if (deleteAttachment != null && recyclerViewInterface != null) {
                 deleteAttachment.setOnClickListener(v -> {
-                    Toast.makeText(v.getContext(), "delete attachment", Toast.LENGTH_SHORT).show();
+                    int pos = getBindingAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onItemClick(pos, DELETE);
+                    }
                 });
-
             }
 
             view.setOnClickListener(v -> {
                 if (recyclerViewInterface != null) {
                     int pos = getBindingAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
-                        recyclerViewInterface.onItemClick(pos);
+                        recyclerViewInterface.onItemClick(pos, CLICK);
                     }
                 }
             });

@@ -6,10 +6,19 @@ public class Attachment {
     private String title;
 
     private byte[] imageBytes;
+    private String imageBytesBase64;
 
 
     public Long getId() {
         return id;
+    }
+
+    public String getImageBytesBase64() {
+        return imageBytesBase64;
+    }
+
+    public void setImageBytesBase64(String imageBytesBase64) {
+        this.imageBytesBase64 = imageBytesBase64;
     }
 
     public void setId(Long id) {
@@ -39,6 +48,8 @@ public class Attachment {
     public void setImageBytes(byte[] imageBytes) {
         this.imageBytes = imageBytes;
     }
+
+    public Attachment() {}
 
     public Attachment(Long id, Long achievement_id, String title) {
         this.id = id;

@@ -36,17 +36,17 @@ public class AttachmentController {
 
 
     @PostMapping
-    public void createAttachment(@RequestBody Attachment attachment, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
+    public Long createAttachment(@RequestBody Attachment attachment, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
         userKeyService.checkAuthAttachment(attachment, key);
 
-        attachmentService.createAttachment(attachment);
+        return attachmentService.createAttachment(attachment);
     }
 
     @DeleteMapping
-    public void deleteAttachment(@RequestParam Long id, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
-        userKeyService.checkAuthAttachment(attachmentService.getAttachmentById(id), key);
+    public void deleteAttachment(@RequestParam Long attachmentId, @RequestHeader("x-api-key") String key) throws IOException, AuthException {
+        userKeyService.checkAuthAttachment(attachmentService.getAttachmentById(attachmentId), key);
 
-        attachmentService.deleteAttachment(id);
+        attachmentService.deleteAttachment(attachmentId);
     }
 
     @PutMapping

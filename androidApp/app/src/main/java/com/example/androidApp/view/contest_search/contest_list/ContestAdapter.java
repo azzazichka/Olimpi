@@ -83,6 +83,7 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleView, lvlView, dateView, gradeView;
+        public static final int CLICK = 0;
 
         ViewHolder(View view, RecyclerViewInterface recyclerViewInterface){
             super(view);
@@ -94,7 +95,7 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.ViewHold
                 if (recyclerViewInterface != null) {
                     int pos = getBindingAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
-                        recyclerViewInterface.onItemClick(pos);
+                        recyclerViewInterface.onItemClick(pos, CLICK);
                     }
                 }
             });

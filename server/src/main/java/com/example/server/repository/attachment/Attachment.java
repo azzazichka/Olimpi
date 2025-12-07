@@ -1,5 +1,6 @@
 package com.example.server.repository.attachment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class Attachment {
     private String title;
 
     @Transient
-    private byte[] imageBytes;
+    @JsonProperty
+    private String imageBytesBase64;
 
     public String getPath() {
         return System.getProperty("user.dir") +

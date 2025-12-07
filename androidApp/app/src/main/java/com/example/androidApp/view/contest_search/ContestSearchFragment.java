@@ -66,7 +66,7 @@ public class ContestSearchFragment extends Fragment implements RecyclerViewInter
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, int type) {
         Contest clickedContest = adapter.getContests().get(position);
 
         UserEventApi userEventApi = ServiceGenerator.createService(UserEventApi.class);

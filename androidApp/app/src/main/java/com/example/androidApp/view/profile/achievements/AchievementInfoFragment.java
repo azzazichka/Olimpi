@@ -5,7 +5,11 @@ import static android.view.View.VISIBLE;
 import static com.example.androidApp.model.entity.UserEvent.setUserEventDate;
 import static com.example.androidApp.model.entity.UserEvent.setUserEventNotification;
 
+import android.content.ContentResolver;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,6 +29,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.androidApp.RecyclerViewInterface;
 import com.example.androidApp.model.DateConverter;
+import com.example.androidApp.model.entity.Attachment;
 import com.example.androidApp.model.entity.Contest;
 import com.example.androidApp.model.entity.UserEvent;
 import com.example.androidApp.presenter.server.RequestGenerator;
@@ -33,6 +41,10 @@ import com.example.androidApp.view.contest_search.contest_list.ContestAdapter;
 import com.example.androidApp.view.profile.achievements.attachment_list.AttachmentAdapter;
 import com.example.androidapp.R;
 import com.example.androidapp.databinding.FragmentAchievementInfoBinding;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -47,7 +59,9 @@ public class AchievementInfoFragment extends Fragment implements RecyclerViewInt
     private Long achievementId;
     private final UserEvent userEvent;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private FragmentAchievementInfoBinding binding;
+
 
     @Nullable
     @Override
@@ -55,9 +69,9 @@ public class AchievementInfoFragment extends Fragment implements RecyclerViewInt
         binding = FragmentAchievementInfoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
     TextView datePicker, notificationPicker;
     ImageButton clearDate, clearNotification;
+    AttachmentAdapter adapter;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -109,7 +123,7 @@ public class AchievementInfoFragment extends Fragment implements RecyclerViewInt
             updateNotificationPickerText();
         });
 
-        AttachmentAdapter adapter = new AttachmentAdapter(this);
+        adapter = new AttachmentAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
@@ -123,10 +137,53 @@ public class AchievementInfoFragment extends Fragment implements RecyclerViewInt
                                             return attachmentApi.getAttachments(achievementId);
                                         }),
                         attachments -> {
+                            for (Attachment attachment : attachments) {
+                                String imageBytesBase64 = attachment.getImageBytesBase64();
+                                byte[] imageBytes = Base64.getDecoder().decode(imageBytesBase64);
+                                attachment.setImageBytes(imageBytes);
+                                attachment.setImageBytesBase64(null);
+                            }
                             adapter.attachments = attachments;
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyItemRangeChanged(0, attachments.size());
                         }
                 ));
+
+
+        pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+            if (uri != null) {
+                Bitmap bitmap;
+                ContentResolver contentResolver = requireActivity().getContentResolver();
+                ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
+                try {
+                    bitmap = ImageDecoder.decodeBitmap(source);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                byte[] imageBytes = bos.toByteArray();
+
+                Attachment attachment = new Attachment();
+                attachment.setAchievement_id(achievementId);
+                attachment.setImageBytesBase64(Base64.getEncoder().encodeToString(imageBytes));
+
+
+                compositeDisposable.add(
+                        RequestGenerator.getInstance().makeApiCall(
+                            "Успешно",
+                            attachmentApi.createAttachment(attachment),
+                                attachmentId -> {
+                                attachment.setImageBytes(imageBytes);
+                                attachment.setImageBytesBase64(null);
+                                attachment.setId(attachmentId);
+                                Log.i("AZZA", "got attachment id: " + attachmentId);
+                                adapter.attachments.add(attachment);
+                                adapter.notifyItemInserted(adapter.attachments.size());
+                            }
+                ));
+            }
+        });
     }
 
     private void updateNotificationPickerText() {
@@ -188,8 +245,37 @@ public class AchievementInfoFragment extends Fragment implements RecyclerViewInt
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int pos, int type) {
+        Toast.makeText(getContext(), "clicked item " + pos, Toast.LENGTH_SHORT).show();
+        if (pos == adapter.attachments.size()) {
+            PickVisualMediaRequest.Builder builder = new PickVisualMediaRequest.Builder();
+            PickVisualMediaRequest pickVisualMediaRequest = builder
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build();
 
-        Toast.makeText(getContext(), "clicked item " + position, Toast.LENGTH_SHORT).show();
+            pickMedia.launch(pickVisualMediaRequest);
+            return;
+        }
+
+        AttachmentApi attachmentApi = ServiceGenerator.createService(AttachmentApi.class);
+        Attachment attachment = adapter.attachments.get(pos);
+
+        switch (type) {
+            case AttachmentAdapter.MyViewHolder.CLICK:
+                break;
+            case AttachmentAdapter.MyViewHolder.DELETE:
+                Log.i("AZZA", "attachment id for delete: " + attachment.getId());
+                compositeDisposable.add(
+                        RequestGenerator.getInstance().makeApiCall(
+                                "Удалено",
+                                attachmentApi.deleteAttachment(attachment.getId()),
+                                r -> {
+                                    adapter.attachments.remove(pos);
+                                    adapter.notifyItemRemoved(pos);
+                                }
+                        )
+                );
+                break;
+        }
     }
 }
