@@ -3,6 +3,7 @@ package com.example.androidApp;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Fragment selectedFragment = null;
         Fragment bottomSelectedFragment = null;
         int itemId = item.getItemId();
+        animateIcon(findViewById(itemId));
 
         if (itemId == R.id.nav_user_events) {
             selectedFragment = new UserEventsFragment();
@@ -137,6 +140,20 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         res &= loadFragment(selectedFragment, R.id.fragment_container);
         res &= loadFragment(bottomSelectedFragment, R.id.fragment_container_bottom_sheet);
         return res;
+    }
+
+    private void animateIcon(View view) {
+        ValueAnimator scaleXAnimator = ValueAnimator.ofFloat(1.0f, 0.8f, 1.0f);
+        scaleXAnimator.setDuration(200);
+        scaleXAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        scaleXAnimator.addUpdateListener(animation -> {
+            float scale = (float) animation.getAnimatedValue();
+            view.setScaleX(scale);
+            view.setScaleY(scale);
+        });
+
+        scaleXAnimator.start();
     }
 
     private boolean loadFragment(Fragment fragment, int containerId) {
