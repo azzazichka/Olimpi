@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="turquoise_400">#02735E</color>
+    <color name="turquoise_500">#035951</color>
+    <color name="turquoise_800">#052424</color>
+
+    <color name="grey_900">#BFBFBF</color>
+    <color name="grey_800">#D9D9D9</color>
+    <color name="grey_600">#6B6B6B</color>
+
+    <color name="dark_900">#0D0D0D</color>
+    <color name="dark_700">#141414</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
 </resources>

@@ -12,7 +12,8 @@
         android:background="@color/white"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        app:cardCornerRadius="30dp">
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/turquoise_800">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_height="wrap_content"
                 android:layout_width="300dp"
@@ -24,6 +25,8 @@
                     android:layout_height="wrap_content"
                     android:text="Олимпиада им. Келдыша"
                     android:layout_marginEnd="10dp"
+                    android:textColor="@color/grey_900"
+                    android:fontFamily="@font/mono_bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/btn_close_dialog"
@@ -66,7 +69,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1ур"
-
+                    android:textColor="@color/grey_900"
+                    android:fontFamily="@font/mono_light"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/contest_info_dialog"
@@ -77,6 +81,8 @@
                         android:id="@+id/contest_info_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/grey_900"
+                        android:fontFamily="@font/mono_semibold_italic"
                         app:layout_constraintTop_toBottomOf="@id/contest_title_dialog"
                         app:layout_constraintLeft_toLeftOf="parent"
                         />

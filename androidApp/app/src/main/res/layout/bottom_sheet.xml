@@ -9,24 +9,23 @@
     android:layout_marginHorizontal="3dp"
     android:background="@drawable/bottom_sheet_card"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="60dp"
+    app:behavior_peekHeight="40dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
     <FrameLayout
-        android:background="@drawable/peek_height_drag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginTop="15dp"
+        android:background="@drawable/peek_height_drag" />
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/bottom_sheet_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/black"
+        android:background="@color/dark_900"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         />
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_bottom_sheet"

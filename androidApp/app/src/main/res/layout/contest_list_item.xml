@@ -9,7 +9,8 @@
     android:minHeight="50dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/turquoise_800">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_margin="10dp"
@@ -21,8 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="6pt"
-
+            android:textColor="@color/grey_900"
             android:text="5-9 класс"
+            android:fontFamily="@font/mono_light"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,8 +34,11 @@
             android:layout_height="wrap_content"
             android:text="Олимпиада им. Мстислава Келдыша"
             android:textSize="8pt"
+            android:fontFamily="@font/mono_semibold"
             app:layout_constraintTop_toBottomOf="@id/contest_grade"
             android:layout_marginTop="5dp"
+            android:textColor="@color/grey_900"
+
             />
         <TextView
             android:id="@+id/contest_lvl"
@@ -42,7 +47,8 @@
             android:text="1ур"
             android:textSize="6pt"
             android:layout_marginTop="10dp"
-
+            android:textColor="@color/grey_900"
+            android:fontFamily="@font/mono_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/contest_title" />
@@ -50,9 +56,10 @@
             android:id="@+id/contest_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2025-12-10"
+            android:text="2025.12.10"
             android:textSize="6pt"
-
+            android:textColor="@color/grey_900"
+            android:fontFamily="@font/mono_light"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
