@@ -64,6 +64,7 @@ public class AttachmentService {
         byte[] imageBytes = Base64.getDecoder().decode(attachment.getImageBytesBase64());
         Files.write(Path.of(attachment.getPath()), imageBytes);
         return attachment.getId();
+
     }
 
     public void updateAttachment(Attachment changes) {

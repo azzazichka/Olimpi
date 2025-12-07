@@ -43,12 +43,11 @@
 
                 <ImageButton
                     android:id="@+id/btn_add_dialog"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleX="1.2"
-                    android:scaleY="1.2"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:visibility="gone"
-                    android:background="@android:drawable/ic_menu_add"
+                    android:background="@drawable/add_square_icon"
+                    app:layout_constraintTop_toBottomOf="@id/contest_info_dialog"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
@@ -77,15 +76,15 @@
                     android:layout_marginTop="10dp"
                     />
 
-                    <TextView
-                        android:id="@+id/contest_info_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey_900"
-                        android:fontFamily="@font/mono_semibold_italic"
-                        app:layout_constraintTop_toBottomOf="@id/contest_title_dialog"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        />
+                <TextView
+                    android:id="@+id/contest_info_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_900"
+                    android:fontFamily="@font/mono_semibold_italic"
+                    app:layout_constraintTop_toBottomOf="@id/contest_title_dialog"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
